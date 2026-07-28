@@ -1,12 +1,11 @@
 # Map tiles (Palikkakartta basemap)
 
 Self-hosted PMTiles vector basemap generator for Suomen Palikkaharrastajat
-ry's [Palikkakartta (Service Map)](https://github.com/Suomen-Palikkaharrastajat-ry/service-map)
+ry's [Palikkaharrastajat ry](https://github.com/Suomen-Palikkaharrastajat-ry/service-map)
 and other SPA/PWAs, extracted from that repository.
 
 Rather than depending on an external tile provider, this builds its own
-vector tiles from open data and serves them via GitHub Pages at
-<https://suomen-palikkaharrastajat-ry.github.io/service-map-tiles/>.
+vector tiles from open data and serves them via GitHub Pages at <https://tiles.palikkaharrastajat.fi/>.
 
 Three regional PMTiles archives keep downloads small — especially on
 mobile, clients only fetch the tiles for the area and zoom they look at:

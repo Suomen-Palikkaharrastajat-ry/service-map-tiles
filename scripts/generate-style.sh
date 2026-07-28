@@ -3,7 +3,7 @@
 # base URL, and copy the QA viewer page.
 set -euo pipefail
 
-BASE_URL="${BASE_URL:-https://suomen-palikkaharrastajat-ry.github.io/service-map-tiles}"
+BASE_URL="${BASE_URL:-https://tiles.palikkaharrastajat.fi}"
 
 mkdir -p dist
 

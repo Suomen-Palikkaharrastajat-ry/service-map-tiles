@@ -47,7 +47,7 @@ Finland from the OpenMapTiles `place` layer instead.
 
 `scripts/generate-style.sh` renders `scripts/style.template.json` into
 `dist/style.json`, substituting `__BASE_URL__` (default
-`https://suomen-palikkaharrastajat-ry.github.io/service-map-tiles`; set
+`https://tiles.palikkaharrastajat.fi`; set
 `BASE_URL=http://localhost:8080` for local testing). Layer plan,
 bottom-to-top: world fill/borders (all zooms) → OpenMapTiles landcover,
 landuse, water, waterways, country boundaries, roads (z5+) → MML Finland
@@ -76,9 +76,9 @@ Everything is served from GitHub Pages with
 `access-control-allow-origin: *` and range-request support:
 
 ```
-https://suomen-palikkaharrastajat-ry.github.io/service-map-tiles/style.json
-https://suomen-palikkaharrastajat-ry.github.io/service-map-tiles/{world,nordic-baltic,finland}.pmtiles
-https://suomen-palikkaharrastajat-ry.github.io/service-map-tiles/fonts/{fontstack}/{range}.pbf
+https://tiles.palikkaharrastajat.fi/style.json
+https://tiles.palikkaharrastajat.fi/{world,nordic-baltic,finland}.pmtiles
+https://tiles.palikkaharrastajat.fi/fonts/{fontstack}/{range}.pbf
 ```
 
 A MapLibre app only needs to register the pmtiles protocol and point at the
@@ -90,7 +90,7 @@ import { Protocol } from 'pmtiles';
 maplibregl.addProtocol('pmtiles', new Protocol().tile);
 new maplibregl.Map({
   container: 'map',
-  style: 'https://suomen-palikkaharrastajat-ry.github.io/service-map-tiles/style.json',
+  style: 'https://tiles.palikkaharrastajat.fi/style.json',
   maxZoom: 11,
 });
 ```
