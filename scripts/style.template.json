@@ -1,0 +1,301 @@
+{
+  "version": 8,
+  "name": "Palikkakartta basemap",
+  "glyphs": "__BASE_URL__/fonts/{fontstack}/{range}.pbf",
+  "sources": {
+    "world": {
+      "type": "vector",
+      "url": "pmtiles://__BASE_URL__/world.pmtiles",
+      "attribution": "Natural Earth"
+    },
+    "nordic": {
+      "type": "vector",
+      "url": "pmtiles://__BASE_URL__/nordic-baltic.pmtiles",
+      "attribution": "&copy; OpenMapTiles &copy; OpenStreetMap contributors"
+    },
+    "finland": {
+      "type": "vector",
+      "url": "pmtiles://__BASE_URL__/finland.pmtiles",
+      "attribution": "&copy; Maanmittauslaitos"
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "#a0c8f0"
+      }
+    },
+    {
+      "id": "world-countries",
+      "type": "fill",
+      "source": "world",
+      "source-layer": "countries",
+      "paint": {
+        "fill-color": "#f0f0f0"
+      }
+    },
+    {
+      "id": "world-boundaries",
+      "type": "line",
+      "source": "world",
+      "source-layer": "boundaries",
+      "paint": {
+        "line-color": "#c0c0c0",
+        "line-width": 1
+      }
+    },
+    {
+      "id": "landcover",
+      "type": "fill",
+      "source": "nordic",
+      "source-layer": "landcover",
+      "minzoom": 5,
+      "filter": ["in", ["get", "class"], ["literal", ["wood", "grass", "farmland"]]],
+      "paint": {
+        "fill-color": [
+          "match", ["get", "class"],
+          "wood", "#dce8d4",
+          "grass", "#e4ecd8",
+          "farmland", "#eeeadc",
+          "#e8e8e0"
+        ],
+        "fill-opacity": 0.6
+      }
+    },
+    {
+      "id": "landuse-residential",
+      "type": "fill",
+      "source": "nordic",
+      "source-layer": "landuse",
+      "minzoom": 5,
+      "filter": ["in", ["get", "class"], ["literal", ["residential", "suburb", "neighbourhood"]]],
+      "paint": {
+        "fill-color": "#e0d8d0"
+      }
+    },
+    {
+      "id": "water",
+      "type": "fill",
+      "source": "nordic",
+      "source-layer": "water",
+      "minzoom": 5,
+      "paint": {
+        "fill-color": "#a0c8f0"
+      }
+    },
+    {
+      "id": "waterway",
+      "type": "line",
+      "source": "nordic",
+      "source-layer": "waterway",
+      "minzoom": 8,
+      "paint": {
+        "line-color": "#a0c8f0",
+        "line-width": 1
+      }
+    },
+    {
+      "id": "boundary-country",
+      "type": "line",
+      "source": "nordic",
+      "source-layer": "boundary",
+      "minzoom": 5,
+      "filter": ["all",
+        ["==", ["get", "admin_level"], 2],
+        ["!=", ["get", "maritime"], 1]
+      ],
+      "paint": {
+        "line-color": "#b0a8b0",
+        "line-width": 1.5
+      }
+    },
+    {
+      "id": "transportation-major",
+      "type": "line",
+      "source": "nordic",
+      "source-layer": "transportation",
+      "minzoom": 6,
+      "filter": ["in", ["get", "class"], ["literal", ["motorway", "trunk", "primary"]]],
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          6, 1,
+          11, 3
+        ]
+      }
+    },
+    {
+      "id": "transportation-minor",
+      "type": "line",
+      "source": "nordic",
+      "source-layer": "transportation",
+      "minzoom": 9,
+      "filter": ["in", ["get", "class"], ["literal", ["secondary", "tertiary", "minor"]]],
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": 1
+      }
+    },
+    {
+      "id": "hallinto",
+      "type": "fill",
+      "source": "finland",
+      "source-layer": "hallinto",
+      "minzoom": 7,
+      "paint": {
+        "fill-color": "#d0d0d0"
+      }
+    },
+    {
+      "id": "taajama",
+      "type": "fill",
+      "source": "finland",
+      "source-layer": "taajama",
+      "minzoom": 7,
+      "paint": {
+        "fill-color": "#e0d8d0"
+      }
+    },
+    {
+      "id": "vesi",
+      "type": "fill",
+      "source": "finland",
+      "source-layer": "vesi",
+      "minzoom": 7,
+      "paint": {
+        "fill-color": "#a0c8f0"
+      }
+    },
+    {
+      "id": "raja",
+      "type": "line",
+      "source": "finland",
+      "source-layer": "raja",
+      "minzoom": 7,
+      "paint": {
+        "line-color": "#a0a0a0",
+        "line-dasharray": [4, 4],
+        "line-width": 1
+      }
+    },
+    {
+      "id": "tie",
+      "type": "line",
+      "source": "finland",
+      "source-layer": "tie",
+      "minzoom": 7,
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": 1.5
+      }
+    },
+    {
+      "id": "world-country-labels",
+      "type": "symbol",
+      "source": "world",
+      "source-layer": "country_labels",
+      "maxzoom": 6,
+      "layout": {
+        "text-field": ["get", "NAME"],
+        "text-font": ["Open Sans Semibold"],
+        "text-size": ["interpolate", ["linear"], ["zoom"],
+          0, 10,
+          6, 14
+        ],
+        "symbol-sort-key": ["coalesce", ["get", "LABELRANK"], 9]
+      },
+      "paint": {
+        "text-color": "#555555",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "place-country",
+      "type": "symbol",
+      "source": "nordic",
+      "source-layer": "place",
+      "minzoom": 6,
+      "filter": ["==", ["get", "class"], "country"],
+      "layout": {
+        "text-field": ["coalesce", ["get", "name:fi"], ["get", "name"]],
+        "text-font": ["Open Sans Semibold"],
+        "text-size": 14,
+        "symbol-sort-key": ["coalesce", ["get", "rank"], 9]
+      },
+      "paint": {
+        "text-color": "#555555",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "place-city",
+      "type": "symbol",
+      "source": "nordic",
+      "source-layer": "place",
+      "minzoom": 5,
+      "filter": ["==", ["get", "class"], "city"],
+      "layout": {
+        "text-field": ["coalesce", ["get", "name:fi"], ["get", "name"]],
+        "text-font": ["Open Sans Semibold"],
+        "text-size": ["interpolate", ["exponential", 1.2], ["zoom"],
+          5, 11,
+          11, 18
+        ],
+        "symbol-sort-key": ["coalesce", ["get", "rank"], 15]
+      },
+      "paint": {
+        "text-color": "#333333",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "place-town",
+      "type": "symbol",
+      "source": "nordic",
+      "source-layer": "place",
+      "minzoom": 8,
+      "filter": ["==", ["get", "class"], "town"],
+      "layout": {
+        "text-field": ["coalesce", ["get", "name:fi"], ["get", "name"]],
+        "text-font": ["Open Sans Regular"],
+        "text-size": ["interpolate", ["exponential", 1.2], ["zoom"],
+          8, 10,
+          11, 14
+        ],
+        "symbol-sort-key": ["coalesce", ["get", "rank"], 15]
+      },
+      "paint": {
+        "text-color": "#333333",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "place-village",
+      "type": "symbol",
+      "source": "nordic",
+      "source-layer": "place",
+      "minzoom": 10,
+      "filter": ["==", ["get", "class"], "village"],
+      "layout": {
+        "text-field": ["coalesce", ["get", "name:fi"], ["get", "name"]],
+        "text-font": ["Open Sans Regular"],
+        "text-size": ["interpolate", ["exponential", 1.2], ["zoom"],
+          10, 10,
+          11, 12
+        ],
+        "symbol-sort-key": ["coalesce", ["get", "rank"], 15]
+      },
+      "paint": {
+        "text-color": "#666666",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    }
+  ]
+}

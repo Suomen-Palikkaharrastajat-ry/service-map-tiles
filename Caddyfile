@@ -1,0 +1,11 @@
+# Local testing server for dist/ — supports HTTP range requests (required by
+# PMTiles) and mirrors GitHub Pages' permissive CORS header.
+{
+	auto_https off
+}
+
+http://localhost:8080 {
+	root * dist
+	header Access-Control-Allow-Origin *
+	file_server
+}

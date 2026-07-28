@@ -1,0 +1,22 @@
+# --- Environment / local ---
+.devenv*
+devenv.local.nix
+devenv.local.yaml
+.direnv
+/service-map/
+
+# --- Generated basemap output ---
+/dist/
+.cache/
+
+# --- Editor & OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# --- Misc / local ---
+.claude/
+TODO*
