@@ -105,6 +105,13 @@ jobs:
           path: .cache/fonts
           key: fonts-${{ hashFiles('scripts/fetch-fonts.sh') }}
 
+      - name: Restore vendor cache
+        id: vendor-cache-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache/vendor
+          key: vendor-${{ hashFiles('scripts/generate-style.sh') }}
+
       - name: Generate style and fonts
         run: devenv shell -- make style fonts
 
@@ -114,6 +121,13 @@ jobs:
         with:
           path: .cache/fonts
           key: ${{ steps.fonts-cache-restore.outputs.cache-primary-key }}
+
+      - name: Save vendor cache
+        if: steps.vendor-cache-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/vendor
+          key: ${{ steps.vendor-cache-restore.outputs.cache-primary-key }}
 
       - name: Inspect archives
         run: |
@@ -138,6 +152,7 @@ jobs:
           path: |
             dist/style.json
             dist/index.html
+            dist/vendor/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
