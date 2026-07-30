@@ -45,20 +45,59 @@ OpenMapTiles `poi` layer that holds stations is fixed at minzoom 14, above the
 z13 this project builds. Only `name*`, `railway`, `station` and a computed
 `rank` are kept.
 
+### `neighbours.pmtiles` — water + major roads for the neighbours (z0–11)
+
+`scripts/nordic-baltic.poly` reaches well beyond the seven countries above:
+Benelux, most of Germany and Poland fall inside the clip polygon. Those areas
+used to get only `place=city,town` labels from the nordic-baltic merge, so they
+rendered as bare background with city names floating on it — measured, a z8 tile
+over Berlin was 9 KB of labels where the equivalent Stockholm tile was 178 KB.
+
+`scripts/generate-neighbours.sh` fills that in. Geofabrik extracts for Belgium,
+the Netherlands, Luxembourg, Germany and Poland are reduced with
+`osmium tags-filter` to water bodies, rivers/canals and the motorway/trunk/primary
+network, merged, and rendered by Planetiler with
+`--only-layers=water,waterway,transportation`.
+
+Three deliberate exclusions keep it cheap:
+
+- **No `landcover`/`landuse`.** They were 115 KB of that 178 KB Stockholm tile —
+  the most expensive layers per unit of visual gain.
+- **No `place`.** `nordic-baltic.pmtiles` already labels these countries; tiling
+  them again would double-draw every city name.
+- **Filtered before merging**, not after, so each country's file is disjoint and
+  the shared-epoch constraint that applies to the nordic-baltic merge does not
+  apply here.
+
+The style draws this source with paint copied verbatim from the matching
+`nordic` layers, so the seam between the two archives is invisible. Keep them
+identical if either changes.
+
 ### `stations.geojson` — railway stations (all zooms)
 
 Not an archive but a plain GeoJSON source in the style, small enough that
 tiling would cost more than it saves. Written by
 `scripts/generate-nordic-baltic.sh` (see above).
 
-### `finland.pmtiles` — MML detail for Finland (z0–11)
+### `finland.pmtiles` — MML detail for Finland (z6–11)
 
 Built by `scripts/generate-finland.sh` from MML Maastokartta 1:250k
 shapefiles (kapsi.fi mirror), merged and reprojected EPSG:3067 → EPSG:4326
-with GDAL. Source layers: `hallinto`, `vesi`, `tie`, `taajama`, `raja`,
-`nimisto`. The `nimisto` place names (with `scalerelev`-derived minzooms)
-are still in the archive for data consumers, but the shipped style labels
-Finland from the OpenMapTiles `place` layer instead.
+with GDAL. Tiled layers: `hallinto`, `vesi`, `tie`, `rautatie`, `taajama`,
+`raja`. Finland is labelled from the OpenMapTiles `place` layer, so MML
+`nimisto` is merged but not tiled.
+
+Two things keep the tiles light, both tuned to what the style actually
+draws:
+
+- **z6 floor.** The lowest `finland` layer minzoom in the style is 6, so
+  z0–5 tiles (350–670 KB each) were built and never fetched.
+- **Per-zoom `tie` filter.** MML ships every road class at full detail, but
+  the style draws only motorway and primary below z9 — measured, 86.5% of
+  the `tie` bytes in a z7 tile were classes nothing rendered until z9/z10.
+  A tippecanoe `-j` filter drops them per zoom (secondary/tertiary/ferry
+  from z9, tracks from z10). **Keep those thresholds in sync with the
+  `tie-*` layer minzooms in `scripts/style.template.json`.**
 
 ### `finland-hd.pmtiles` — Finland OSM high-zoom detail (z12–13)
 
@@ -150,7 +189,11 @@ new maplibregl.Map({
   `Open Sans Semibold`) — the combined
   `Open Sans Regular,Arial Unicode MS Regular` stack is gone.
 - MML `nimisto` labels are no longer styled (OpenMapTiles `place` labels
-  cover the whole region); the layer data remains in `finland.pmtiles`.
+  cover the whole region), and as of the tile-weight pass the layer is no
+  longer tiled into `finland.pmtiles` either.
+- `finland.pmtiles` now starts at z6 rather than z0. Nothing in the style
+  requested those zooms, but a consumer relying on the archive directly
+  should note the new floor.
 - Output is published via GitHub Pages only; the rolling `latest` GitHub
   release is discontinued.
 - Client `maxZoom` should be 13 to see Finland high-zoom detail.

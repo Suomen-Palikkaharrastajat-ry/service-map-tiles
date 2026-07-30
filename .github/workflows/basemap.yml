@@ -32,13 +32,31 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [world, finland, finland-hd, nordic-baltic]
-    continue-on-error: ${{ matrix.target == 'finland-hd' || matrix.target == 'nordic-baltic' }}
+        target: [world, finland, finland-hd, nordic-baltic, neighbours]
+        # Cache only what a run cannot regenerate cheaply. Everything else is
+        # dead weight against the 10 GB per-repo Actions cache limit.
+        include:
+          - target: world
+            cache_path: .cache/world
+          - target: finland
+            # generate-finland.sh re-unzips mml_shape_250k/ (740 MB) and
+            # rebuilds the merged *.geojson (400 MB) unconditionally on every
+            # run, so caching them buys nothing — keep just the source zips.
+            cache_path: .cache/finland/*.zip
+          - target: finland-hd
+            cache_path: .cache/finland-hd
+          - target: nordic-baltic
+            cache_path: .cache/nordic-baltic
+          - target: neighbours
+            cache_path: .cache/neighbours
+    continue-on-error: ${{ matrix.target == 'finland-hd' || matrix.target == 'nordic-baltic' || matrix.target == 'neighbours' }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Free disk space
-        if: matrix.target == 'nordic-baltic'
+        # Both targets pull multi-GB Geofabrik extracts (the German one alone is
+        # several GB) before filtering them down.
+        if: matrix.target == 'nordic-baltic' || matrix.target == 'neighbours'
         run: |
           sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
           df -h /
@@ -60,7 +78,7 @@ jobs:
         id: sources-cache-restore
         uses: actions/cache/restore@v4
         with:
-          path: .cache/${{ matrix.target }}
+          path: ${{ matrix.cache_path }}
           key: ${{ matrix.target }}-sources-${{ hashFiles(format('scripts/generate-{0}.sh', matrix.target)) }}
           restore-keys: |
             ${{ matrix.target }}-sources-
@@ -72,7 +90,7 @@ jobs:
         if: steps.sources-cache-restore.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
-          path: .cache/${{ matrix.target }}
+          path: ${{ matrix.cache_path }}
           key: ${{ steps.sources-cache-restore.outputs.cache-primary-key }}
 
       - name: Upload tiles artifact
@@ -124,7 +142,7 @@ jobs:
 
       - name: Restore fallback PMTiles from cache
         run: |
-          for target in world finland finland-hd nordic-baltic; do
+          for target in world finland finland-hd nordic-baltic neighbours; do
             if [ ! -f "dist/${target}.pmtiles" ]; then
               echo "⚠ dist/${target}.pmtiles missing — will try cached fallback"
             fi
@@ -164,10 +182,18 @@ jobs:
           key: pmtiles-nordic-baltic-impossible
           restore-keys: pmtiles-nordic-baltic-
 
+      - name: Fallback neighbours
+        if: hashFiles('dist/neighbours.pmtiles') == ''
+        uses: actions/cache/restore@v4
+        with:
+          path: dist/neighbours.pmtiles
+          key: pmtiles-neighbours-impossible
+          restore-keys: pmtiles-neighbours-
+
       - name: Verify all archives present
         run: |
           missing=0
-          for target in world finland finland-hd nordic-baltic; do
+          for target in world finland finland-hd nordic-baltic neighbours; do
             if [ ! -f "dist/${target}.pmtiles" ]; then
               echo "::error::dist/${target}.pmtiles is missing and no fallback was found."
               missing=$((missing + 1))
@@ -218,12 +244,24 @@ jobs:
           path: .cache/vendor
           key: ${{ steps.vendor-cache-restore.outputs.cache-primary-key }}
 
-      - name: Inspect archives
+      - name: Inspect and verify archives
         run: |
+          fail=0
           for f in dist/*.pmtiles; do
             echo "── $f"
             devenv shell -- pmtiles show "$f"
+            # `pmtiles verify` exits 0 even when it rejects an archive, so match
+            # on its output rather than trusting the exit status.
+            out=$(devenv shell -- pmtiles verify "$f" 2>&1)
+            echo "$out"
+            if echo "$out" | grep -q 'invalid'; then
+              echo "::error::$f failed pmtiles verify"
+              fail=1
+            fi
           done
+          if [ "$fail" -ne 0 ]; then
+            exit 1
+          fi
 
       - name: Enforce GitHub Pages size budget
         run: |

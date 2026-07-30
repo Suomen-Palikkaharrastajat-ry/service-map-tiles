@@ -18,6 +18,8 @@ and the Open Sans font license is also **served** next to the glyphs at
 | OpenMapTiles schema / profile | `nordic-baltic.pmtiles` | CC BY 4.0 (design) · BSD-3 (code) | `© OpenMapTiles` | [OpenMapTiles.md](licenses/OpenMapTiles.md) |
 | OpenStreetMap (via Geofabrik) | `stations.geojson` | ODbL 1.0 | `© OpenStreetMap contributors` | [ODbL-1.0.txt](licenses/ODbL-1.0.txt) |
 | OpenStreetMap (via Geofabrik) | `finland-hd.pmtiles` | ODbL 1.0 | `© OpenStreetMap contributors` | [ODbL-1.0.txt](licenses/ODbL-1.0.txt) |
+| OpenStreetMap (via Geofabrik) | `neighbours.pmtiles` | ODbL 1.0 | `© OpenStreetMap contributors` | [ODbL-1.0.txt](licenses/ODbL-1.0.txt) |
+| OpenMapTiles schema / profile | `neighbours.pmtiles` | CC BY 4.0 (design) · BSD-3 (code) | `© OpenMapTiles` | [OpenMapTiles.md](licenses/OpenMapTiles.md) |
 | OpenMapTiles schema / profile | `finland-hd.pmtiles` | CC BY 4.0 (design) · BSD-3 (code) | `© OpenMapTiles` | [OpenMapTiles.md](licenses/OpenMapTiles.md) |
 | Natural Earth 50m | `world.pmtiles` | Public domain | courtesy `Natural Earth` (no obligation) | — |
 | Open Sans (openmaptiles/fonts glyphs) | `fonts/` glyph PBFs | SIL OFL 1.1 | Reserved Font Name "Open Sans" | [SIL-OFL-1.1.txt](licenses/SIL-OFL-1.1.txt) |

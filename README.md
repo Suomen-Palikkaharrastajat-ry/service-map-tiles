@@ -7,15 +7,16 @@ and other SPA/PWAs, extracted from that repository.
 Rather than depending on an external tile provider, this builds its own
 vector tiles from open data and serves them via GitHub Pages at <https://tiles.palikkaharrastajat.fi/>.
 
-Three regional PMTiles archives keep downloads small — especially on
+Five regional PMTiles archives keep downloads small — especially on
 mobile, clients only fetch the tiles for the area and zoom they look at:
 
 | Archive | Source | Coverage | Zoom |
 |---|---|---|---|
 | `world.pmtiles` | Natural Earth 50m | World country borders + labels | z0–6 |
 | `nordic-baltic.pmtiles` | OpenStreetMap (Geofabrik) via Planetiler, OpenMapTiles schema | Norway, Sweden, Denmark, Finland, Estonia, Latvia, Lithuania | z0–11 |
-| `finland.pmtiles` | MML Maastokartta 1:250k (kapsi.fi mirror) | Finland | z0–11 |
+| `finland.pmtiles` | MML Maastokartta 1:250k (kapsi.fi mirror) | Finland | z6–11 |
 | `finland-hd.pmtiles` | OpenStreetMap (Geofabrik) via Planetiler, OpenMapTiles schema | Finland (buildings, detailed roads, names) | z12–13 |
+| `neighbours.pmtiles` | OpenStreetMap (Geofabrik) via Planetiler, OpenMapTiles schema | Benelux, Germany, Poland (water + major roads only) | z0–11 |
 
 Alongside them the site serves `stations.geojson` (~500 KB): railway
 stations and halts for the whole region, including metro and light rail.
@@ -24,7 +25,7 @@ layer fixed at minzoom 14, above the z13 built here — so they ship as a
 plain GeoJSON style source.
 
 The site also serves `style.json` (a ready MapLibre style referencing all
-three archives with absolute URLs), glyph fonts under `fonts/`, and a QA
+five archives with absolute URLs), glyph fonts under `fonts/`, and a QA
 viewer at `index.html`.
 
 ## Development Environment
@@ -56,6 +57,8 @@ scripts/generate-world.sh          Natural Earth → dist/world.pmtiles
 scripts/generate-finland.sh        MML shapefiles → dist/finland.pmtiles
 scripts/generate-nordic-baltic.sh  Geofabrik OSM + Planetiler → dist/nordic-baltic.pmtiles
                                    + dist/stations.geojson
+scripts/generate-finland-hd.sh     Geofabrik Finland OSM → dist/finland-hd.pmtiles
+scripts/generate-neighbours.sh     Geofabrik OSM → dist/neighbours.pmtiles
 scripts/generate-style.sh          style.template.json → dist/style.json + index.html
 scripts/fetch-fonts.sh             Glyph PBFs → dist/fonts/
 scripts/style.template.json        MapLibre style with __BASE_URL__ placeholder
@@ -70,7 +73,7 @@ See [`docs/basemap.md`](docs/basemap.md) for details.
 ## CI and Publishing
 
 GitHub Actions ([`.github/workflows/basemap.yml`](.github/workflows/basemap.yml))
-shellchecks the scripts and builds the three archives in parallel jobs
+shellchecks the scripts and builds the five archives in parallel jobs
 (each with its own source-data cache) on every push and pull request. An
 assemble job adds `style.json`, `index.html`, and fonts, checks the total
 size against GitHub Pages' ~1 GB budget, and on `main` deploys `dist/` to

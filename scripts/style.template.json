@@ -13,6 +13,11 @@
       "url": "pmtiles://__BASE_URL__/nordic-baltic.pmtiles",
       "attribution": "&copy; OpenMapTiles &copy; OpenStreetMap contributors"
     },
+    "neighbours": {
+      "type": "vector",
+      "url": "pmtiles://__BASE_URL__/neighbours.pmtiles",
+      "attribution": "&copy; OpenMapTiles &copy; OpenStreetMap contributors"
+    },
     "finland": {
       "type": "vector",
       "url": "pmtiles://__BASE_URL__/finland.pmtiles",
@@ -134,6 +139,30 @@
       "id": "waterway",
       "type": "line",
       "source": "nordic",
+      "source-layer": "waterway",
+      "minzoom": 8,
+      "paint": {
+        "line-color": "#a0c8f0",
+        "line-width": 1
+      }
+    },
+    {
+      "id": "neighbours-water",
+      "metadata": {
+        "note": "Benelux/Germany/Poland detail from neighbours.pmtiles. Paint must stay identical to the matching nordic layer so the two archives look like one map."
+      },
+      "type": "fill",
+      "source": "neighbours",
+      "source-layer": "water",
+      "minzoom": 5,
+      "paint": {
+        "fill-color": "#a0c8f0"
+      }
+    },
+    {
+      "id": "neighbours-waterway",
+      "type": "line",
+      "source": "neighbours",
       "source-layer": "waterway",
       "minzoom": 8,
       "paint": {
@@ -529,6 +558,146 @@
       }
     },
     {
+      "id": "neighbours-transportation-primary-casing",
+      "type": "line",
+      "source": "neighbours",
+      "source-layer": "transportation",
+      "minzoom": 6,
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "primary"
+      ],
+      "paint": {
+        "line-color": "#c0735e",
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          6,
+          1.8,
+          11,
+          4
+        ]
+      }
+    },
+    {
+      "id": "neighbours-transportation-motorway-casing",
+      "type": "line",
+      "source": "neighbours",
+      "source-layer": "transportation",
+      "minzoom": 6,
+      "filter": [
+        "in",
+        [
+          "get",
+          "class"
+        ],
+        [
+          "literal",
+          [
+            "motorway",
+            "trunk"
+          ]
+        ]
+      ],
+      "paint": {
+        "line-color": "#7dab56",
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          6,
+          2,
+          11,
+          5
+        ]
+      }
+    },
+    {
+      "id": "neighbours-transportation-primary",
+      "type": "line",
+      "source": "neighbours",
+      "source-layer": "transportation",
+      "minzoom": 6,
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "primary"
+      ],
+      "paint": {
+        "line-color": "#e8a48c",
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          6,
+          1,
+          11,
+          2.5
+        ]
+      }
+    },
+    {
+      "id": "neighbours-transportation-motorway",
+      "type": "line",
+      "source": "neighbours",
+      "source-layer": "transportation",
+      "minzoom": 6,
+      "filter": [
+        "in",
+        [
+          "get",
+          "class"
+        ],
+        [
+          "literal",
+          [
+            "motorway",
+            "trunk"
+          ]
+        ]
+      ],
+      "paint": {
+        "line-color": "#b2d88e",
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          6,
+          1,
+          11,
+          3.5
+        ]
+      }
+    },
+    {
       "id": "hallinto",
       "type": "fill",
       "source": "finland",
@@ -770,6 +939,9 @@
     },
     {
       "id": "tie-motorway-casing",
+      "metadata": {
+        "note": "The minzoom of every tie-* layer must stay in sync with the per-zoom Kohdeluokk filter (-j) in scripts/generate-finland.sh: roads are not tiled below the zoom that first draws them."
+      },
       "type": "line",
       "source": "finland",
       "source-layer": "tie",
