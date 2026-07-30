@@ -37,6 +37,20 @@ appear at which zoom across the whole region, Finland included.
 Finland is part of this build on purpose: it gives seamless coastlines,
 borders and label ranking across the region.
 
+This script also writes **`dist/stations.geojson`**, a few hundred KB of
+railway station points (`railway=station` and `railway=halt`, which includes
+metro via `station=subway`; trams are excluded) extracted from the merged
+extract with `osmium tags-filter`. They cannot come from the tiles: the
+OpenMapTiles `poi` layer that holds stations is fixed at minzoom 14, above the
+z13 this project builds. Only `name*`, `railway`, `station` and a computed
+`rank` are kept.
+
+### `stations.geojson` — railway stations (all zooms)
+
+Not an archive but a plain GeoJSON source in the style, small enough that
+tiling would cost more than it saves. Written by
+`scripts/generate-nordic-baltic.sh` (see above).
+
 ### `finland.pmtiles` — MML detail for Finland (z0–11)
 
 Built by `scripts/generate-finland.sh` from MML Maastokartta 1:250k
@@ -63,9 +77,25 @@ zoom levels overzoom the regional archive's z11 tiles transparently.
 `https://tiles.palikkaharrastajat.fi`; set
 `BASE_URL=http://localhost:8080` for local testing). Layer plan,
 bottom-to-top: world fill/borders (all zooms) → OpenMapTiles landcover,
-landuse, water, waterways, country boundaries, roads (z5+) → MML Finland
-layers (z7+) → labels (world country labels to z6, then OpenMapTiles
-`place` classes: country z6, city z5, town z8, village z10).
+landuse, water, waterways, country boundaries, railways (z8+), roads (z5+)
+→ MML Finland layers, railways then roads (z7+) → labels (world country
+labels to z6, then OpenMapTiles `place` classes: country z6, city z5,
+town z8, village z10) → station dots and labels.
+
+That order is load-bearing. `hallinto` is an opaque fill covering all of
+Finland, so every `nordic` layer below it is masked inside Finland and shows
+only in the rest of the region — which is why Finland gets MML geometry and
+the neighbours get OSM, from the same style. Railways go before the road
+layers in both blocks so they draw underneath roads, as on GT Tiekartta.
+MML railways are drawn with a track-count-dependent width (`Raideluku`) and
+a white dashed overlay for the classic hatched look; `Vertikaali` below 0
+(tunnel) drops the opacity.
+
+Stations render from the `stations` GeoJSON source: solid dots for mainline
+stations from z9, hollow dots for halts and orange dots for metro/light rail
+from z11, names from z11. `rank` (0 station, 1 halt, 2 urban transit) is
+precomputed at extraction time and drives both the per-zoom split and label
+collision priority.
 
 `scripts/fetch-fonts.sh` downloads prebuilt glyph PBFs
 ([openmaptiles/fonts](https://github.com/openmaptiles/fonts) v2.0) for the
@@ -91,6 +121,7 @@ Everything is served from GitHub Pages with
 ```
 https://tiles.palikkaharrastajat.fi/style.json
 https://tiles.palikkaharrastajat.fi/{world,nordic-baltic,finland}.pmtiles
+https://tiles.palikkaharrastajat.fi/stations.geojson
 https://tiles.palikkaharrastajat.fi/fonts/{fontstack}/{range}.pbf
 ```
 

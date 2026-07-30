@@ -16,6 +16,7 @@ and the Open Sans font license is also **served** next to the glyphs at
 | MML Maastokartta 1:250k (Maanmittauslaitos) | `finland.pmtiles` | CC BY 4.0 | `© Maanmittauslaitos` | [CC-BY-4.0.txt](licenses/CC-BY-4.0.txt) |
 | OpenStreetMap (via Geofabrik) | `nordic-baltic.pmtiles` | ODbL 1.0 | `© OpenStreetMap contributors` | [ODbL-1.0.txt](licenses/ODbL-1.0.txt) |
 | OpenMapTiles schema / profile | `nordic-baltic.pmtiles` | CC BY 4.0 (design) · BSD-3 (code) | `© OpenMapTiles` | [OpenMapTiles.md](licenses/OpenMapTiles.md) |
+| OpenStreetMap (via Geofabrik) | `stations.geojson` | ODbL 1.0 | `© OpenStreetMap contributors` | [ODbL-1.0.txt](licenses/ODbL-1.0.txt) |
 | OpenStreetMap (via Geofabrik) | `finland-hd.pmtiles` | ODbL 1.0 | `© OpenStreetMap contributors` | [ODbL-1.0.txt](licenses/ODbL-1.0.txt) |
 | OpenMapTiles schema / profile | `finland-hd.pmtiles` | CC BY 4.0 (design) · BSD-3 (code) | `© OpenMapTiles` | [OpenMapTiles.md](licenses/OpenMapTiles.md) |
 | Natural Earth 50m | `world.pmtiles` | Public domain | courtesy `Natural Earth` (no obligation) | — |

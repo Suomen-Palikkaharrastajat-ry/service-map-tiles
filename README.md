@@ -17,6 +17,12 @@ mobile, clients only fetch the tiles for the area and zoom they look at:
 | `finland.pmtiles` | MML Maastokartta 1:250k (kapsi.fi mirror) | Finland | z0–11 |
 | `finland-hd.pmtiles` | OpenStreetMap (Geofabrik) via Planetiler, OpenMapTiles schema | Finland (buildings, detailed roads, names) | z12–13 |
 
+Alongside them the site serves `stations.geojson` (~500 KB): railway
+stations and halts for the whole region, including metro and light rail.
+They cannot come from the archives — OpenMapTiles keeps stations in a `poi`
+layer fixed at minzoom 14, above the z13 built here — so they ship as a
+plain GeoJSON style source.
+
 The site also serves `style.json` (a ready MapLibre style referencing all
 three archives with absolute URLs), glyph fonts under `fonts/`, and a QA
 viewer at `index.html`.
@@ -49,6 +55,7 @@ make shell
 scripts/generate-world.sh          Natural Earth → dist/world.pmtiles
 scripts/generate-finland.sh        MML shapefiles → dist/finland.pmtiles
 scripts/generate-nordic-baltic.sh  Geofabrik OSM + Planetiler → dist/nordic-baltic.pmtiles
+                                   + dist/stations.geojson
 scripts/generate-style.sh          style.template.json → dist/style.json + index.html
 scripts/fetch-fonts.sh             Glyph PBFs → dist/fonts/
 scripts/style.template.json        MapLibre style with __BASE_URL__ placeholder

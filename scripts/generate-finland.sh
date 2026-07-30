@@ -35,6 +35,7 @@ merge_layer() {
 merge_layer "HallintoAlue" "$CACHE/hallinto.geojson"
 merge_layer "VesiAlue" "$CACHE/vesi.geojson"
 merge_layer "TieViiva" "$CACHE/tie.geojson"
+merge_layer "RautatieViiva" "$CACHE/rautatie.geojson"
 merge_layer "TaajamaAlue" "$CACHE/taajama.geojson"
 merge_layer "HallintoalueRaja" "$CACHE/raja.geojson"
 merge_layer "KarttanimiPiste" "$CACHE/nimisto_unsorted.geojson"
@@ -75,7 +76,7 @@ fi
 echo "Generating PMTiles with tippecanoe..."
 # Find which files successfully generated (some layers might be empty or missing)
 GEOJSONS=""
-for f in hallinto vesi tie taajama raja nimisto; do
+for f in hallinto vesi tie rautatie taajama raja nimisto; do
   if [ -f "$CACHE/${f}.geojson" ]; then
     GEOJSONS="$GEOJSONS $CACHE/${f}.geojson"
   fi
