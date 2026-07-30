@@ -7,7 +7,7 @@ shell: ## Enter devenv shell
 	devenv shell
 
 .PHONY: tiles
-tiles: world finland finland-hd nordic-baltic style fonts ## Build all PMTiles, style and fonts into dist/
+tiles: world finland finland-hd nordic-baltic neighbours style fonts ## Build all PMTiles, style and fonts into dist/
 
 .PHONY: world
 world: dist/world.pmtiles ## Generate world country borders and labels (Natural Earth, z0-6)
@@ -28,10 +28,18 @@ dist/finland-hd.pmtiles: scripts/generate-finland-hd.sh
 	bash scripts/generate-finland-hd.sh
 
 .PHONY: nordic-baltic
-nordic-baltic: dist/nordic-baltic.pmtiles ## Generate Nordic + Baltic OSM tiles with Planetiler (z0-11)
+nordic-baltic: dist/nordic-baltic.pmtiles dist/stations.geojson ## Generate Nordic + Baltic OSM tiles with Planetiler (z0-11)
 
-dist/nordic-baltic.pmtiles: scripts/generate-nordic-baltic.sh
+# Grouped target (&:): one run of the script writes both the archive and the
+# stations GeoJSON, so either one going missing must re-run it exactly once.
+dist/nordic-baltic.pmtiles dist/stations.geojson &: scripts/generate-nordic-baltic.sh scripts/nordic-baltic.poly
 	bash scripts/generate-nordic-baltic.sh
+
+.PHONY: neighbours
+neighbours: dist/neighbours.pmtiles ## Generate water + major roads for Benelux, Germany, Poland (z0-11)
+
+dist/neighbours.pmtiles: scripts/generate-neighbours.sh scripts/nordic-baltic.poly
+	bash scripts/generate-neighbours.sh
 
 .PHONY: style
 style: ## Generate dist/style.json and dist/index.html (override base URL with BASE_URL=...)
