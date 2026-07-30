@@ -79,14 +79,20 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dist-${{ matrix.target }}
-          path: dist/*.pmtiles
+          # nordic-baltic also emits dist/stations.geojson; the other targets
+          # have no GeoJSON output and the missing-glob warning is harmless.
+          path: |
+            dist/*.pmtiles
+            dist/*.geojson
           compression-level: 0
 
       - name: Cache built PMTiles for fallback
         if: success()
         uses: actions/cache/save@v4
         with:
-          path: dist/${{ matrix.target }}.pmtiles
+          path: |
+            dist/${{ matrix.target }}.pmtiles
+            dist/stations.geojson
           key: pmtiles-${{ matrix.target }}-${{ github.run_id }}
 
   assemble:
@@ -152,11 +158,13 @@ jobs:
         if: hashFiles('dist/nordic-baltic.pmtiles') == ''
         uses: actions/cache/restore@v4
         with:
-          path: dist/nordic-baltic.pmtiles
+          path: |
+            dist/nordic-baltic.pmtiles
+            dist/stations.geojson
           key: pmtiles-nordic-baltic-impossible
           restore-keys: pmtiles-nordic-baltic-
 
-      - name: Verify all PMTiles present
+      - name: Verify all archives present
         run: |
           missing=0
           for target in world finland finland-hd nordic-baltic; do
@@ -167,6 +175,14 @@ jobs:
               echo "✓ dist/${target}.pmtiles ($(du -h "dist/${target}.pmtiles" | cut -f1))"
             fi
           done
+          # style.json declares a `stations` GeoJSON source, so a missing file
+          # would break the deployed style.
+          if [ ! -f dist/stations.geojson ]; then
+            echo "::error::dist/stations.geojson is missing and no fallback was found."
+            missing=$((missing + 1))
+          else
+            echo "✓ dist/stations.geojson ($(du -h dist/stations.geojson | cut -f1))"
+          fi
           if [ "$missing" -gt 0 ]; then
             exit 1
           fi
