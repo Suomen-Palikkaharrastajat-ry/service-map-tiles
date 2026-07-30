@@ -22,7 +22,7 @@ deploys the output.
 scripts/generate-world.sh          Natural Earth 50m → dist/world.pmtiles (z0–6)
 scripts/generate-finland.sh        MML 1:250k shapefiles → dist/finland.pmtiles (z0–11)
 scripts/generate-finland-hd.sh     Geofabrik Finland OSM + Planetiler → dist/finland-hd.pmtiles (z12–13)
-scripts/generate-nordic-baltic.sh  Geofabrik OSM + osmium + Planetiler → dist/nordic-baltic.pmtiles (z0–11) (Nordic, Baltic, DE, Benelux, PL)
+scripts/generate-nordic-baltic.sh  Geofabrik OSM + osmium + Planetiler → dist/nordic-baltic.pmtiles (z0–11)
 scripts/generate-style.sh          style.template.json → dist/style.json + dist/index.html
 scripts/fetch-fonts.sh             openmaptiles/fonts glyph PBFs → dist/fonts/
 scripts/style.template.json        MapLibre style; __BASE_URL__ substituted at build time

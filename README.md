@@ -13,7 +13,7 @@ mobile, clients only fetch the tiles for the area and zoom they look at:
 | Archive | Source | Coverage | Zoom |
 |---|---|---|---|
 | `world.pmtiles` | Natural Earth 50m | World country borders + labels | z0–6 |
-| `nordic-baltic.pmtiles` | OpenStreetMap (Geofabrik) via Planetiler, OpenMapTiles schema | Norway, Sweden, Denmark, Finland, Estonia, Latvia, Lithuania, Germany, Netherlands, Belgium, Luxembourg, Poland | z0–11 |
+| `nordic-baltic.pmtiles` | OpenStreetMap (Geofabrik) via Planetiler, OpenMapTiles schema | Norway, Sweden, Denmark, Finland, Estonia, Latvia, Lithuania | z0–11 |
 | `finland.pmtiles` | MML Maastokartta 1:250k (kapsi.fi mirror) | Finland | z0–11 |
 | `finland-hd.pmtiles` | OpenStreetMap (Geofabrik) via Planetiler, OpenMapTiles schema | Finland (buildings, detailed roads, names) | z12–13 |
 

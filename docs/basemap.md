@@ -23,8 +23,7 @@ land-fill fallback outside the Nordic region at higher zooms.
 ### `nordic-baltic.pmtiles` — OSM detail for the region (z0–11)
 
 Built by `scripts/generate-nordic-baltic.sh`: Geofabrik extracts for
-Norway, Sweden, Denmark, Finland, Estonia, Latvia, Lithuania, Germany,
-the Netherlands, Belgium, Luxembourg and Poland are merged with
+Norway, Sweden, Denmark, Finland, Estonia, Latvia and Lithuania are merged with
 `osmium merge` and rendered by [Planetiler](https://github.com/onthegomap/planetiler)
 (pinned jar, checksum-verified) using the **OpenMapTiles** profile with
 `--only-layers=landcover,landuse,water,waterway,boundary,transportation,place`

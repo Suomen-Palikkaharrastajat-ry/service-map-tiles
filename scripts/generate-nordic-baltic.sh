@@ -11,7 +11,7 @@ mkdir -p dist
 PLANETILER_VERSION=0.10.2
 PLANETILER_SHA256=f310bd0413e2e4512b27f4046d418664e8e1d3bf31603c2a70e23de06c167e4d
 
-COUNTRIES="norway sweden denmark finland estonia latvia lithuania germany netherlands belgium luxembourg poland"
+COUNTRIES="norway sweden denmark finland estonia latvia lithuania"
 
 # osmium merge requires overlapping objects to have identical versions, so all
 # extracts must come from the same Geofabrik epoch. The CI cache keeps them
