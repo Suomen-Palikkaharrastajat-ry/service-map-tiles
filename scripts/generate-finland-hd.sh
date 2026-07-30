@@ -14,7 +14,12 @@ PLANETILER_SHA256=f310bd0413e2e4512b27f4046d418664e8e1d3bf31603c2a70e23de06c167e
 PBF="$CACHE/finland-latest.osm.pbf"
 if [ ! -f "$PBF" ]; then
   echo "Downloading Finland extract..."
-  curl -sfL --retry 5 --retry-delay 10 -A "service-map-tiles (github.com/Suomen-Palikkaharrastajat-ry)" -o "$PBF" "https://download.geofabrik.de/europe/finland-latest.osm.pbf"
+  # Random jitter (0-15s) to avoid hammering Geofabrik when
+  # multiple CI jobs start simultaneously.
+  sleep $((RANDOM % 16))
+  curl -sfL --retry 5 --retry-delay 15 --retry-all-errors \
+    -A "service-map-tiles (github.com/Suomen-Palikkaharrastajat-ry)" \
+    -o "$PBF" "https://download.geofabrik.de/europe/finland-latest.osm.pbf"
 fi
 
 echo "Installing Planetiler ${PLANETILER_VERSION}..."

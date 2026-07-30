@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Regional basemap: Geofabrik OSM extracts -> osmium merge -> Planetiler
 # (OpenMapTiles profile, styled layers only) -> dist/nordic-baltic.pmtiles
-# (z0-11). Covers Nordic + Baltic + Germany, Benelux and Poland.
+# (z0-11). Covers Nordic + Baltic.
 set -euo pipefail
 
 CACHE=.cache/nordic-baltic
@@ -23,7 +23,12 @@ if [ ! -f "$CACHE/nordic-baltic.osm.pbf" ]; then
     pbf="$CACHE/${country}-latest.osm.pbf"
     if [ ! -f "$pbf" ]; then
       echo "Downloading $country..."
-      curl -sfL --retry 5 --retry-delay 10 -A "service-map-tiles (github.com/Suomen-Palikkaharrastajat-ry)" -o "$pbf" "https://download.geofabrik.de/europe/${country}-latest.osm.pbf"
+      # Random jitter (0-15s) to avoid hammering Geofabrik when
+      # multiple CI jobs start simultaneously.
+      sleep $((RANDOM % 16))
+      curl -sfL --retry 5 --retry-delay 15 --retry-all-errors \
+        -A "service-map-tiles (github.com/Suomen-Palikkaharrastajat-ry)" \
+        -o "$pbf" "https://download.geofabrik.de/europe/${country}-latest.osm.pbf"
     fi
   done
 
