@@ -300,6 +300,70 @@
       }
     },
     {
+      "id": "transportation-secondary-casing",
+      "type": "line",
+      "source": "nordic",
+      "source-layer": "transportation",
+      "minzoom": 9,
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "secondary"
+      ],
+      "paint": {
+        "line-color": "#c4b05a",
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          9,
+          1.4,
+          11,
+          2.5
+        ]
+      }
+    },
+    {
+      "id": "transportation-primary-casing",
+      "type": "line",
+      "source": "nordic",
+      "source-layer": "transportation",
+      "minzoom": 6,
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "primary"
+      ],
+      "paint": {
+        "line-color": "#c0735e",
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          6,
+          1.8,
+          11,
+          4
+        ]
+      }
+    },
+    {
       "id": "transportation-motorway-casing",
       "type": "line",
       "source": "nordic",
@@ -338,39 +402,32 @@
       }
     },
     {
-      "id": "transportation-primary-casing",
+      "id": "transportation-tertiary",
       "type": "line",
       "source": "nordic",
       "source-layer": "transportation",
-      "minzoom": 6,
+      "minzoom": 9,
       "filter": [
-        "==",
+        "in",
         [
           "get",
           "class"
         ],
-        "primary"
+        [
+          "literal",
+          [
+            "tertiary",
+            "minor"
+          ]
+        ]
       ],
       "paint": {
-        "line-color": "#c0735e",
-        "line-width": [
-          "interpolate",
-          [
-            "exponential",
-            1.4
-          ],
-          [
-            "zoom"
-          ],
-          6,
-          1.8,
-          11,
-          4
-        ]
+        "line-color": "#ffffff",
+        "line-width": 1
       }
     },
     {
-      "id": "transportation-secondary-casing",
+      "id": "transportation-secondary",
       "type": "line",
       "source": "nordic",
       "source-layer": "transportation",
@@ -384,7 +441,7 @@
         "secondary"
       ],
       "paint": {
-        "line-color": "#c4b05a",
+        "line-color": "#f0d87a",
         "line-width": [
           "interpolate",
           [
@@ -395,7 +452,39 @@
             "zoom"
           ],
           9,
-          1.4,
+          0.8,
+          11,
+          1.5
+        ]
+      }
+    },
+    {
+      "id": "transportation-primary",
+      "type": "line",
+      "source": "nordic",
+      "source-layer": "transportation",
+      "minzoom": 6,
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "primary"
+      ],
+      "paint": {
+        "line-color": "#e8a48c",
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          6,
+          1,
           11,
           2.5
         ]
@@ -437,95 +526,6 @@
           11,
           3.5
         ]
-      }
-    },
-    {
-      "id": "transportation-primary",
-      "type": "line",
-      "source": "nordic",
-      "source-layer": "transportation",
-      "minzoom": 6,
-      "filter": [
-        "==",
-        [
-          "get",
-          "class"
-        ],
-        "primary"
-      ],
-      "paint": {
-        "line-color": "#e8a48c",
-        "line-width": [
-          "interpolate",
-          [
-            "exponential",
-            1.4
-          ],
-          [
-            "zoom"
-          ],
-          6,
-          1,
-          11,
-          2.5
-        ]
-      }
-    },
-    {
-      "id": "transportation-secondary",
-      "type": "line",
-      "source": "nordic",
-      "source-layer": "transportation",
-      "minzoom": 9,
-      "filter": [
-        "==",
-        [
-          "get",
-          "class"
-        ],
-        "secondary"
-      ],
-      "paint": {
-        "line-color": "#f0d87a",
-        "line-width": [
-          "interpolate",
-          [
-            "exponential",
-            1.4
-          ],
-          [
-            "zoom"
-          ],
-          9,
-          0.8,
-          11,
-          1.5
-        ]
-      }
-    },
-    {
-      "id": "transportation-tertiary",
-      "type": "line",
-      "source": "nordic",
-      "source-layer": "transportation",
-      "minzoom": 9,
-      "filter": [
-        "in",
-        [
-          "get",
-          "class"
-        ],
-        [
-          "literal",
-          [
-            "tertiary",
-            "minor"
-          ]
-        ]
-      ],
-      "paint": {
-        "line-color": "#ffffff",
-        "line-width": 1
       }
     },
     {
@@ -695,11 +695,11 @@
       }
     },
     {
-      "id": "tie-motorway-casing",
+      "id": "tie-secondary-casing",
       "type": "line",
       "source": "finland",
       "source-layer": "tie",
-      "minzoom": 7,
+      "minzoom": 9,
       "filter": [
         "in",
         [
@@ -709,13 +709,12 @@
         [
           "literal",
           [
-            12111,
-            12112
+            12122
           ]
         ]
       ],
       "paint": {
-        "line-color": "#7dab56",
+        "line-color": "#c4b05a",
         "line-width": [
           "interpolate",
           [
@@ -725,10 +724,10 @@
           [
             "zoom"
           ],
-          7,
-          2,
+          9,
+          1.4,
           11,
-          5
+          2.5
         ]
       }
     },
@@ -770,44 +769,7 @@
       }
     },
     {
-      "id": "tie-secondary-casing",
-      "type": "line",
-      "source": "finland",
-      "source-layer": "tie",
-      "minzoom": 9,
-      "filter": [
-        "in",
-        [
-          "get",
-          "Kohdeluokk"
-        ],
-        [
-          "literal",
-          [
-            12122
-          ]
-        ]
-      ],
-      "paint": {
-        "line-color": "#c4b05a",
-        "line-width": [
-          "interpolate",
-          [
-            "exponential",
-            1.4
-          ],
-          [
-            "zoom"
-          ],
-          9,
-          1.4,
-          11,
-          2.5
-        ]
-      }
-    },
-    {
-      "id": "tie-motorway",
+      "id": "tie-motorway-casing",
       "type": "line",
       "source": "finland",
       "source-layer": "tie",
@@ -827,7 +789,7 @@
         ]
       ],
       "paint": {
-        "line-color": "#b2d88e",
+        "line-color": "#7dab56",
         "line-width": [
           "interpolate",
           [
@@ -838,9 +800,125 @@
             "zoom"
           ],
           7,
-          1.2,
+          2,
           11,
-          3.5
+          5
+        ]
+      }
+    },
+    {
+      "id": "tie-ferry",
+      "type": "line",
+      "source": "finland",
+      "source-layer": "tie",
+      "minzoom": 9,
+      "filter": [
+        "in",
+        [
+          "get",
+          "Kohdeluokk"
+        ],
+        [
+          "literal",
+          [
+            12151,
+            12152
+          ]
+        ]
+      ],
+      "paint": {
+        "line-color": "#8bb4d8",
+        "line-dasharray": [
+          6,
+          3
+        ],
+        "line-width": 1
+      }
+    },
+    {
+      "id": "tie-track",
+      "type": "line",
+      "source": "finland",
+      "source-layer": "tie",
+      "minzoom": 10,
+      "filter": [
+        "in",
+        [
+          "get",
+          "Kohdeluokk"
+        ],
+        [
+          "literal",
+          [
+            12141
+          ]
+        ]
+      ],
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": 0.5,
+        "line-opacity": 0.7
+      }
+    },
+    {
+      "id": "tie-tertiary",
+      "type": "line",
+      "source": "finland",
+      "source-layer": "tie",
+      "minzoom": 9,
+      "filter": [
+        "in",
+        [
+          "get",
+          "Kohdeluokk"
+        ],
+        [
+          "literal",
+          [
+            12131,
+            12132
+          ]
+        ]
+      ],
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": 0.8
+      }
+    },
+    {
+      "id": "tie-secondary",
+      "type": "line",
+      "source": "finland",
+      "source-layer": "tie",
+      "minzoom": 9,
+      "filter": [
+        "in",
+        [
+          "get",
+          "Kohdeluokk"
+        ],
+        [
+          "literal",
+          [
+            12122
+          ]
+        ]
+      ],
+      "paint": {
+        "line-color": "#f0d87a",
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          9,
+          0.8,
+          11,
+          1.5
         ]
       }
     },
@@ -882,11 +960,11 @@
       }
     },
     {
-      "id": "tie-secondary",
+      "id": "tie-motorway",
       "type": "line",
       "source": "finland",
       "source-layer": "tie",
-      "minzoom": 9,
+      "minzoom": 7,
       "filter": [
         "in",
         [
@@ -896,12 +974,13 @@
         [
           "literal",
           [
-            12122
+            12111,
+            12112
           ]
         ]
       ],
       "paint": {
-        "line-color": "#f0d87a",
+        "line-color": "#b2d88e",
         "line-width": [
           "interpolate",
           [
@@ -911,90 +990,11 @@
           [
             "zoom"
           ],
-          9,
-          0.8,
+          7,
+          1.2,
           11,
-          1.5
+          3.5
         ]
-      }
-    },
-    {
-      "id": "tie-tertiary",
-      "type": "line",
-      "source": "finland",
-      "source-layer": "tie",
-      "minzoom": 9,
-      "filter": [
-        "in",
-        [
-          "get",
-          "Kohdeluokk"
-        ],
-        [
-          "literal",
-          [
-            12131,
-            12132
-          ]
-        ]
-      ],
-      "paint": {
-        "line-color": "#ffffff",
-        "line-width": 0.8
-      }
-    },
-    {
-      "id": "tie-track",
-      "type": "line",
-      "source": "finland",
-      "source-layer": "tie",
-      "minzoom": 10,
-      "filter": [
-        "in",
-        [
-          "get",
-          "Kohdeluokk"
-        ],
-        [
-          "literal",
-          [
-            12141
-          ]
-        ]
-      ],
-      "paint": {
-        "line-color": "#ffffff",
-        "line-width": 0.5,
-        "line-opacity": 0.7
-      }
-    },
-    {
-      "id": "tie-ferry",
-      "type": "line",
-      "source": "finland",
-      "source-layer": "tie",
-      "minzoom": 9,
-      "filter": [
-        "in",
-        [
-          "get",
-          "Kohdeluokk"
-        ],
-        [
-          "literal",
-          [
-            12151,
-            12152
-          ]
-        ]
-      ],
-      "paint": {
-        "line-color": "#8bb4d8",
-        "line-dasharray": [
-          6,
-          3
-        ],
-        "line-width": 1
       }
     },
     {
@@ -1196,6 +1196,70 @@
       }
     },
     {
+      "id": "finland-hd-road-secondary-casing",
+      "type": "line",
+      "source": "finland-hd",
+      "source-layer": "transportation",
+      "minzoom": 12,
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "secondary"
+      ],
+      "paint": {
+        "line-color": "#c4b05a",
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          2.5,
+          13,
+          3.5
+        ]
+      }
+    },
+    {
+      "id": "finland-hd-road-primary-casing",
+      "type": "line",
+      "source": "finland-hd",
+      "source-layer": "transportation",
+      "minzoom": 12,
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "primary"
+      ],
+      "paint": {
+        "line-color": "#c0735e",
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          4,
+          13,
+          5.5
+        ]
+      }
+    },
+    {
       "id": "finland-hd-road-motorway-casing",
       "type": "line",
       "source": "finland-hd",
@@ -1234,21 +1298,29 @@
       }
     },
     {
-      "id": "finland-hd-road-primary-casing",
+      "id": "finland-hd-road-minor",
       "type": "line",
       "source": "finland-hd",
       "source-layer": "transportation",
       "minzoom": 12,
       "filter": [
-        "==",
+        "in",
         [
           "get",
           "class"
         ],
-        "primary"
+        [
+          "literal",
+          [
+            "tertiary",
+            "minor",
+            "service",
+            "path"
+          ]
+        ]
       ],
       "paint": {
-        "line-color": "#c0735e",
+        "line-color": "#ffffff",
         "line-width": [
           "interpolate",
           [
@@ -1259,14 +1331,14 @@
             "zoom"
           ],
           12,
-          4,
+          1.5,
           13,
-          5.5
+          2
         ]
       }
     },
     {
-      "id": "finland-hd-road-secondary-casing",
+      "id": "finland-hd-road-secondary",
       "type": "line",
       "source": "finland-hd",
       "source-layer": "transportation",
@@ -1280,7 +1352,39 @@
         "secondary"
       ],
       "paint": {
-        "line-color": "#c4b05a",
+        "line-color": "#f0d87a",
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          1.5,
+          13,
+          2.5
+        ]
+      }
+    },
+    {
+      "id": "finland-hd-road-primary",
+      "type": "line",
+      "source": "finland-hd",
+      "source-layer": "transportation",
+      "minzoom": 12,
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "primary"
+      ],
+      "paint": {
+        "line-color": "#e8a48c",
         "line-width": [
           "interpolate",
           [
@@ -1332,110 +1436,6 @@
           3.5,
           13,
           5
-        ]
-      }
-    },
-    {
-      "id": "finland-hd-road-primary",
-      "type": "line",
-      "source": "finland-hd",
-      "source-layer": "transportation",
-      "minzoom": 12,
-      "filter": [
-        "==",
-        [
-          "get",
-          "class"
-        ],
-        "primary"
-      ],
-      "paint": {
-        "line-color": "#e8a48c",
-        "line-width": [
-          "interpolate",
-          [
-            "exponential",
-            1.4
-          ],
-          [
-            "zoom"
-          ],
-          12,
-          2.5,
-          13,
-          3.5
-        ]
-      }
-    },
-    {
-      "id": "finland-hd-road-secondary",
-      "type": "line",
-      "source": "finland-hd",
-      "source-layer": "transportation",
-      "minzoom": 12,
-      "filter": [
-        "==",
-        [
-          "get",
-          "class"
-        ],
-        "secondary"
-      ],
-      "paint": {
-        "line-color": "#f0d87a",
-        "line-width": [
-          "interpolate",
-          [
-            "exponential",
-            1.4
-          ],
-          [
-            "zoom"
-          ],
-          12,
-          1.5,
-          13,
-          2.5
-        ]
-      }
-    },
-    {
-      "id": "finland-hd-road-minor",
-      "type": "line",
-      "source": "finland-hd",
-      "source-layer": "transportation",
-      "minzoom": 12,
-      "filter": [
-        "in",
-        [
-          "get",
-          "class"
-        ],
-        [
-          "literal",
-          [
-            "tertiary",
-            "minor",
-            "service",
-            "path"
-          ]
-        ]
-      ],
-      "paint": {
-        "line-color": "#ffffff",
-        "line-width": [
-          "interpolate",
-          [
-            "exponential",
-            1.4
-          ],
-          [
-            "zoom"
-          ],
-          12,
-          1.5,
-          13,
-          2
         ]
       }
     },
