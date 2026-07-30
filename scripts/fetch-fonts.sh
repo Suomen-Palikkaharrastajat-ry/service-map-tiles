@@ -8,7 +8,7 @@ mkdir -p "$CACHE"
 mkdir -p dist/fonts
 
 FONTS_URL="https://github.com/openmaptiles/fonts/releases/download/v2.0/noto-open-sans.zip"
-STACKS=("Open Sans Regular" "Open Sans Semibold")
+STACKS=("Open Sans Regular" "Open Sans Semibold" "Open Sans Bold")
 
 if [ ! -d "$CACHE/extracted" ]; then
   echo "Downloading glyph fonts..."
