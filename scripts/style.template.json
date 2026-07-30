@@ -1860,6 +1860,128 @@
       }
     },
     {
+      "id": "nordic-road-number",
+      "metadata": {
+        "note": "OSM joins multiple route numbers with \";\" (E18;E75); render them separated by three spaces instead. split/join are MapLibre expressions (>=5), not in the Mapbox style spec."
+      },
+      "type": "symbol",
+      "source": "nordic",
+      "source-layer": "transportation_name",
+      "minzoom": 7,
+      "filter": [
+        "has",
+        "ref"
+      ],
+      "layout": {
+        "text-field": [
+          "join",
+          [
+            "split",
+            [
+              "to-string",
+              [
+                "get",
+                "ref"
+              ]
+            ],
+            ";"
+          ],
+          "   "
+        ],
+        "text-font": [
+          "Open Sans Bold"
+        ],
+        "text-size": 11,
+        "symbol-placement": "line",
+        "symbol-spacing": 250,
+        "text-pitch-alignment": "viewport",
+        "text-rotation-alignment": "viewport"
+      },
+      "paint": {
+        "text-color": [
+          "case",
+          [
+            "==",
+            [
+              "get",
+              "class"
+            ],
+            "motorway"
+          ],
+          "#ffffff",
+          [
+            "==",
+            [
+              "get",
+              "class"
+            ],
+            "trunk"
+          ],
+          "#ffffff",
+          [
+            "==",
+            [
+              "get",
+              "class"
+            ],
+            "primary"
+          ],
+          "#000000",
+          [
+            "==",
+            [
+              "get",
+              "class"
+            ],
+            "secondary"
+          ],
+          "#000000",
+          "#ffffff"
+        ],
+        "text-halo-color": [
+          "case",
+          [
+            "==",
+            [
+              "get",
+              "class"
+            ],
+            "motorway"
+          ],
+          "#009900",
+          [
+            "==",
+            [
+              "get",
+              "class"
+            ],
+            "trunk"
+          ],
+          "#cc0000",
+          [
+            "==",
+            [
+              "get",
+              "class"
+            ],
+            "primary"
+          ],
+          "#ffcc00",
+          [
+            "==",
+            [
+              "get",
+              "class"
+            ],
+            "secondary"
+          ],
+          "#ffffff",
+          "#0033cc"
+        ],
+        "text-halo-width": 3.5
+      }
+    },
+    {
       "id": "finland-road-number",
       "type": "symbol",
       "source": "finland",
@@ -1969,7 +2091,7 @@
           "#ffffff",
           "#0033cc"
         ],
-        "text-halo-width": 2.5
+        "text-halo-width": 3.5
       }
     },
     {
@@ -1983,7 +2105,21 @@
         "ref"
       ],
       "layout": {
-        "text-field": "{ref}",
+        "text-field": [
+          "join",
+          [
+            "split",
+            [
+              "to-string",
+              [
+                "get",
+                "ref"
+              ]
+            ],
+            ";"
+          ],
+          "   "
+        ],
         "text-font": [
           "Open Sans Bold"
         ],
@@ -2074,13 +2210,16 @@
           "#ffffff",
           "#0033cc"
         ],
-        "text-halo-width": 2.5
+        "text-halo-width": 3.5
+      },
+      "metadata": {
+        "note": "OSM joins multiple route numbers with \";\" (E18;E75); render them separated by three spaces instead. split/join are MapLibre expressions (>=5), not in the Mapbox style spec."
       }
     },
     {
       "id": "neighbours-road-number",
       "metadata": {
-        "note": "Route numbers for Benelux/Germany/Poland, from the neighbours archive transportation_name layer. Paint must match finland-hd-road-number."
+        "note": "OSM joins multiple route numbers with \";\" (E18;E75); render them separated by three spaces instead. split/join are MapLibre expressions (>=5), not in the Mapbox style spec."
       },
       "type": "symbol",
       "source": "neighbours",
@@ -2091,7 +2230,21 @@
         "ref"
       ],
       "layout": {
-        "text-field": "{ref}",
+        "text-field": [
+          "join",
+          [
+            "split",
+            [
+              "to-string",
+              [
+                "get",
+                "ref"
+              ]
+            ],
+            ";"
+          ],
+          "   "
+        ],
         "text-font": [
           "Open Sans Bold"
         ],
@@ -2182,7 +2335,7 @@
           "#ffffff",
           "#0033cc"
         ],
-        "text-halo-width": 2.5
+        "text-halo-width": 3.5
       }
     },
     {

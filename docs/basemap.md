@@ -26,7 +26,7 @@ Built by `scripts/generate-nordic-baltic.sh`: Geofabrik extracts for
 Norway, Sweden, Denmark, Finland, Estonia, Latvia and Lithuania are merged with
 `osmium merge` and rendered by [Planetiler](https://github.com/onthegomap/planetiler)
 (pinned jar, checksum-verified) using the **OpenMapTiles** profile with
-`--only-layers=landcover,landuse,water,waterway,boundary,transportation,place`
+`--only-layers=landcover,landuse,water,waterway,boundary,transportation,transportation_name,place`
 (only the layers the style references — building, housenumber, poi and
 other unstyled layers are excluded to save space). That schema's `place`
 layer (class `city`/`town`/`village` plus a
@@ -133,6 +133,17 @@ zoom levels overzoom the regional archive's z11 tiles transparently.
 bottom-to-top: world fill/borders (all zooms) → OpenMapTiles landcover,
 landuse, water, waterways, country boundaries, railways (z8+), roads (z5+)
 → MML Finland layers, railways then roads (z7+) → labels.
+
+Route numbers come from the OpenMapTiles `transportation_name` layer (MML
+`Tienumero` inside Finland) and are drawn as coloured shields — a bold label
+over a thick `text-halo` in the class colour. OSM joins multiple numbers for one
+road with a semicolon (`E18;E75`); the style renders them separated by three
+spaces using `["join", ["split", ...]]`. Those two are MapLibre expressions
+rather than Mapbox style-spec ones, so the style needs MapLibre GL JS 5+.
+
+`nordic-road-number` is deliberately the lowest-priority symbol layer: the
+`nordic` source covers Finland as well, and labels draw above `hallinto`, so
+without that the OSM shields would win over the MML ones inside Finland.
 
 The label block is ordered by **collision priority, not by drawing**. MapLibre
 places symbols in reverse style order, so the last symbol layer is placed first

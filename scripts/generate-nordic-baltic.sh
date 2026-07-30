@@ -103,7 +103,7 @@ REPO_ROOT=$PWD
     --download \
     --minzoom=0 --maxzoom=11 \
     --polygon="$REPO_ROOT/scripts/nordic-baltic.poly" \
-    --only-layers=landcover,landuse,water,waterway,boundary,transportation,place \
+    --only-layers=landcover,landuse,water,waterway,boundary,transportation,transportation_name,place \
     --storage=mmap --nodemap-type=sortedtable \
     --languages=fi,sv,en,no,da,et,lv,lt,de,nl,fr,pl \
     --fetch-wikidata=false --use-wikidata=false \

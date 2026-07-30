@@ -91,6 +91,14 @@ Verify outputs with `pmtiles show dist/<file>.pmtiles` and
   `finland-hd`, `stations`) and attribution strings stable. The contract with
   downstream is the `style.json` URL — `service-map` loads only that and never
   names a source — but keep them stable for other consumers.
+- **Route number shields.** Every region has them now: MML `Tienumero` inside
+  Finland, and OpenMapTiles `transportation_name` elsewhere — which is why
+  `nordic-baltic` and `neighbours` both ask Planetiler for that layer. OSM joins
+  multiple numbers with `;` (`E18;E75`), rendered three-spaces-separated via
+  `["join", ["split", ...]]`; those are MapLibre expressions, not Mapbox
+  style-spec ones, so the style requires MapLibre GL JS 5+. `nordic-road-number`
+  must stay the lowest-priority symbol layer or its shields beat the MML ones
+  inside Finland.
 - **Symbol layers are placed in REVERSE style order.** MapLibre's
   `Placement.continuePlacement` walks the layer order from the end backwards, so
   the symbol layer listed *last* is placed *first* and wins collisions. The
