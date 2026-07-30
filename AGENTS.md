@@ -118,9 +118,13 @@ Verify outputs with `pmtiles show dist/<file>.pmtiles` and
   `osmium tags-filter` (~30 s); `generate-nordic-baltic.sh` and
   `generate-neighbours.sh` each call it for their own region, writing
   `dist/stations-<region>.geojson`, and `scripts/merge-stations.sh` combines
-  those into the single `dist/stations.geojson` the style declares. The merge
-  tolerates a region being absent so one failed build degrades to a map missing
-  that region's stations rather than a broken `stations` source.
+  those and tiles them into `dist/stations.pmtiles`, which is what the style
+  declares. The merge tolerates a region being absent so one failed build
+  degrades to a map missing that region's stations rather than a broken
+  `stations` source. **Tiled, not GeoJSON, on purpose**: as a `geojson` source
+  the whole file was fetched on every map load (375 KB gzipped once the
+  neighbours' 13k stations were in) for something no layer draws below z9.
+  `dist/stations.geojson` is still published for direct consumers.
 - **Licenses/attribution are load-bearing.** Keep the source `attribution`
   fields, the vendored `licenses/` texts, `NOTICE.md`, and the served
   `dist/fonts/OFL.txt` (written by `fetch-fonts.sh`) and `dist/NOTICE.md`

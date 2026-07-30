@@ -42,9 +42,10 @@ dist/neighbours.pmtiles dist/stations-neighbours.geojson &: scripts/generate-nei
 	bash scripts/generate-neighbours.sh
 
 .PHONY: stations
-stations: dist/stations.geojson ## Merge the per-region station files into dist/stations.geojson
+stations: dist/stations.geojson dist/stations.pmtiles ## Merge the per-region station files and tile them
 
-dist/stations.geojson: scripts/merge-stations.sh dist/stations-nordic-baltic.geojson dist/stations-neighbours.geojson
+# Grouped target (&:): one run writes the merged GeoJSON and the tiled archive.
+dist/stations.geojson dist/stations.pmtiles &: scripts/merge-stations.sh dist/stations-nordic-baltic.geojson dist/stations-neighbours.geojson
 	bash scripts/merge-stations.sh
 
 .PHONY: style

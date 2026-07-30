@@ -29,8 +29,8 @@
       "attribution": "&copy; OpenMapTiles &copy; OpenStreetMap contributors"
     },
     "stations": {
-      "type": "geojson",
-      "data": "__BASE_URL__/stations.geojson",
+      "type": "vector",
+      "url": "pmtiles://__BASE_URL__/stations.pmtiles",
       "attribution": "&copy; OpenStreetMap contributors"
     }
   },
@@ -2531,6 +2531,7 @@
       "id": "station-label",
       "type": "symbol",
       "source": "stations",
+      "source-layer": "stations",
       "minzoom": 11,
       "layout": {
         "text-field": [
@@ -2688,6 +2689,7 @@
       "id": "station-circle",
       "type": "circle",
       "source": "stations",
+      "source-layer": "stations",
       "minzoom": 9,
       "filter": [
         "==",
@@ -2721,6 +2723,7 @@
       "id": "station-halt-circle",
       "type": "circle",
       "source": "stations",
+      "source-layer": "stations",
       "minzoom": 11,
       "filter": [
         "==",
@@ -2754,6 +2757,7 @@
       "id": "station-transit-circle",
       "type": "circle",
       "source": "stations",
+      "source-layer": "stations",
       "minzoom": 11,
       "filter": [
         "==",

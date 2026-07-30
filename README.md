@@ -18,11 +18,12 @@ mobile, clients only fetch the tiles for the area and zoom they look at:
 | `finland-hd.pmtiles` | OpenStreetMap (Geofabrik) via Planetiler, OpenMapTiles schema | Finland (buildings, detailed roads, names) | z12–13 |
 | `neighbours.pmtiles` | OpenStreetMap (Geofabrik) via Planetiler, OpenMapTiles schema | Benelux, Germany, Poland (water, roads to secondary + route numbers, rail) | z0–11 |
 
-Alongside them the site serves `stations.geojson` (~500 KB): railway
+Alongside them the site serves `stations.pmtiles` (~1.4 MB): railway
 stations and halts for the whole region, including metro and light rail.
-They cannot come from the archives — OpenMapTiles keeps stations in a `poi`
-layer fixed at minzoom 14, above the z13 built here — so they ship as a
-plain GeoJSON style source.
+They cannot come from the other archives — OpenMapTiles keeps stations in a
+`poi` layer fixed at minzoom 14, above the z13 built here — so they are
+extracted separately and tiled. The same data is also published as
+`stations.geojson` for consumers that want it whole.
 
 The site also serves `style.json` (a ready MapLibre style referencing all
 five archives with absolute URLs), glyph fonts under `fonts/`, and a QA

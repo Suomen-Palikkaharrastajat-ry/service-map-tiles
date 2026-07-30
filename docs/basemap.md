@@ -87,8 +87,16 @@ identical if either changes.
 
 ### `stations.geojson` — railway stations (all zooms)
 
-Not an archive but a plain GeoJSON source in the style, small enough that
-tiling would cost more than it saves. Each regional build writes its own
+Tiled, not a plain GeoJSON source. As GeoJSON the whole file was fetched on
+every map load — 2.7 MB, 375 KB gzipped once both regions were in — for
+something no layer draws below z9. `merge-stations.sh` now also runs it through
+tippecanoe into `dist/stations.pmtiles` (1.4 MB, root-only directory), so a
+client range-requests a 12 KB directory plus the tiles in view instead. The
+per-feature minzoom mirrors the style: mainline stations from z9, halts and
+urban transit from z11; points overzoom above z11.
+
+`dist/stations.geojson` is still published for anyone consuming the data
+directly, but the style no longer loads it. Each regional build writes its own
 `dist/stations-<region>.geojson` through `scripts/extract-stations.sh`, and
 `scripts/merge-stations.sh` (`make stations`) combines them into the single
 file the style declares. The merge tolerates a region being missing, so one
