@@ -14,34 +14,22 @@ PLANETILER_SHA256=f310bd0413e2e4512b27f4046d418664e8e1d3bf31603c2a70e23de06c167e
 PBF="$CACHE/finland-latest.osm.pbf"
 if [ ! -f "$PBF" ]; then
   echo "Downloading Finland extract..."
-  curl -sL -o "$PBF" "https://download.geofabrik.de/europe/finland-latest.osm.pbf"
+  curl -sfL --retry 5 --retry-delay 10 -A "service-map-tiles (github.com/Suomen-Palikkaharrastajat-ry)" -o "$PBF" "https://download.geofabrik.de/europe/finland-latest.osm.pbf"
 fi
 
 echo "Installing Planetiler ${PLANETILER_VERSION}..."
 if [ ! -f "$CACHE/planetiler.jar" ] || \
    ! echo "${PLANETILER_SHA256}  $CACHE/planetiler.jar" | sha256sum -c - > /dev/null 2>&1; then
-  curl -sL -o "$CACHE/planetiler.jar" \
+  curl -sfL -o "$CACHE/planetiler.jar" \
     "https://github.com/onthegomap/planetiler/releases/download/v${PLANETILER_VERSION}/planetiler.jar"
   echo "${PLANETILER_SHA256}  $CACHE/planetiler.jar" | sha256sum -c -
 fi
 
 echo "Creating dummy shapefile to skip unused global downloads..."
-python3 -c "
-import zipfile
-with zipfile.ZipFile('$CACHE/dummy.zip', 'w') as zf:
-    header = bytearray(100)
-    header[0:4] = (9994).to_bytes(4, 'big')
-    header[24:28] = (50).to_bytes(4, 'big')
-    header[28:32] = (1000).to_bytes(4, 'little')
-    header[32:36] = (5).to_bytes(4, 'little')
-    zf.writestr('dummy.shp', header)
-    zf.writestr('dummy.shx', header)
-    dbf = bytearray(32)
-    dbf[0] = 0x03
-    dbf[8:10] = (32).to_bytes(2, 'little')
-    dbf[10:12] = (1).to_bytes(2, 'little')
-    zf.writestr('dummy.dbf', dbf)
-"
+echo "id,WKT" > "$CACHE/dummy.csv"
+echo "1,POLYGON EMPTY" >> "$CACHE/dummy.csv"
+ogr2ogr -f "ESRI Shapefile" "$CACHE/dummy.shp" "$CACHE/dummy.csv"
+zip -j "$CACHE/dummy.zip" "$CACHE/dummy.shp" "$CACHE/dummy.shx" "$CACHE/dummy.dbf" "$CACHE/dummy.prj" 2>/dev/null || true
 
 echo "Running Planetiler (OpenMapTiles profile, z12-13)..."
 REPO_ROOT=$PWD

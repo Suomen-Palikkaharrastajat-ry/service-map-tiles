@@ -22,8 +22,8 @@ if [ ! -f "$CACHE/nordic-baltic.osm.pbf" ]; then
   for country in $COUNTRIES; do
     pbf="$CACHE/${country}-latest.osm.pbf"
     if [ ! -f "$pbf" ]; then
-      echo "Downloading ${country}..."
-      curl -sL -o "$pbf" "https://download.geofabrik.de/europe/${country}-latest.osm.pbf"
+      echo "Downloading $country..."
+      curl -sfL --retry 5 --retry-delay 10 -A "service-map-tiles (github.com/Suomen-Palikkaharrastajat-ry)" -o "$pbf" "https://download.geofabrik.de/europe/${country}-latest.osm.pbf"
     fi
   done
 
@@ -46,7 +46,7 @@ fi
 echo "Installing Planetiler ${PLANETILER_VERSION}..."
 if [ ! -f "$CACHE/planetiler.jar" ] || \
    ! echo "${PLANETILER_SHA256}  $CACHE/planetiler.jar" | sha256sum -c - > /dev/null 2>&1; then
-  curl -sL -o "$CACHE/planetiler.jar" \
+  curl -sfL -o "$CACHE/planetiler.jar" \
     "https://github.com/onthegomap/planetiler/releases/download/v${PLANETILER_VERSION}/planetiler.jar"
   echo "${PLANETILER_SHA256}  $CACHE/planetiler.jar" | sha256sum -c -
 fi
