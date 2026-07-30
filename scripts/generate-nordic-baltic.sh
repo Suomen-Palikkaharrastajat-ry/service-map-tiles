@@ -12,6 +12,7 @@ PLANETILER_VERSION=0.10.2
 PLANETILER_SHA256=f310bd0413e2e4512b27f4046d418664e8e1d3bf31603c2a70e23de06c167e4d
 
 COUNTRIES="norway sweden denmark finland estonia latvia lithuania"
+PLACE_COUNTRIES="belgium netherlands luxembourg germany poland"
 
 # osmium merge requires overlapping objects to have identical versions, so all
 # extracts must come from the same Geofabrik epoch. The CI cache keeps them
@@ -32,10 +33,31 @@ if [ ! -f "$CACHE/nordic-baltic.osm.pbf" ]; then
     fi
   done
 
+  echo "Fetching place-only countries..."
+  for country in $PLACE_COUNTRIES; do
+    pbf="$CACHE/${country}-latest.osm.pbf"
+    filtered="$CACHE/${country}-places.osm.pbf"
+    if [ ! -f "$filtered" ]; then
+      if [ ! -f "$pbf" ]; then
+        echo "Downloading $country..."
+        sleep $((RANDOM % 16))
+        curl -sfL --retry 5 --retry-delay 15 --retry-all-errors \
+          -A "service-map-tiles (github.com/Suomen-Palikkaharrastajat-ry)" \
+          -o "$pbf" "https://download.geofabrik.de/europe/${country}-latest.osm.pbf"
+      fi
+      echo "Extracting places from $country..."
+      osmium tags-filter -R "$pbf" n/place=city,town -o "$filtered" --overwrite
+      rm -f "$pbf"
+    fi
+  done
+
   echo "Merging extracts with osmium..."
   PBFS=()
   for country in $COUNTRIES; do
     PBFS+=("$CACHE/${country}-latest.osm.pbf")
+  done
+  for country in $PLACE_COUNTRIES; do
+    PBFS+=("$CACHE/${country}-places.osm.pbf")
   done
   osmium merge "${PBFS[@]}" -o "$CACHE/nordic-baltic.osm.pbf" --overwrite
 
@@ -43,6 +65,9 @@ if [ ! -f "$CACHE/nordic-baltic.osm.pbf" ]; then
   # The merged file is kept and cached for subsequent runs.
   for country in $COUNTRIES; do
     rm -f "$CACHE/${country}-latest.osm.pbf"
+  done
+  for country in $PLACE_COUNTRIES; do
+    rm -f "$CACHE/${country}-places.osm.pbf"
   done
 else
   echo "Merged extract $CACHE/nordic-baltic.osm.pbf already exists, skipping download."

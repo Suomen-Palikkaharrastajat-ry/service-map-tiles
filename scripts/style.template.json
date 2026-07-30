@@ -62,13 +62,34 @@
       "source": "nordic",
       "source-layer": "landcover",
       "minzoom": 5,
-      "filter": ["in", ["get", "class"], ["literal", ["wood", "grass", "farmland"]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "class"
+        ],
+        [
+          "literal",
+          [
+            "wood",
+            "grass",
+            "farmland"
+          ]
+        ]
+      ],
       "paint": {
         "fill-color": [
-          "match", ["get", "class"],
-          "wood", "#dce8d4",
-          "grass", "#e4ecd8",
-          "farmland", "#eeeadc",
+          "match",
+          [
+            "get",
+            "class"
+          ],
+          "wood",
+          "#dce8d4",
+          "grass",
+          "#e4ecd8",
+          "farmland",
+          "#eeeadc",
           "#e8e8e0"
         ],
         "fill-opacity": 0.6
@@ -80,7 +101,21 @@
       "source": "nordic",
       "source-layer": "landuse",
       "minzoom": 5,
-      "filter": ["in", ["get", "class"], ["literal", ["residential", "suburb", "neighbourhood"]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "class"
+        ],
+        [
+          "literal",
+          [
+            "residential",
+            "suburb",
+            "neighbourhood"
+          ]
+        ]
+      ],
       "paint": {
         "fill-color": "#e0d8d0"
       }
@@ -112,9 +147,24 @@
       "source": "nordic",
       "source-layer": "boundary",
       "minzoom": 5,
-      "filter": ["all",
-        ["==", ["get", "admin_level"], 2],
-        ["!=", ["get", "maritime"], 1]
+      "filter": [
+        "all",
+        [
+          "==",
+          [
+            "get",
+            "admin_level"
+          ],
+          2
+        ],
+        [
+          "!=",
+          [
+            "get",
+            "maritime"
+          ],
+          1
+        ]
       ],
       "paint": {
         "line-color": "#b0a8b0",
@@ -127,13 +177,42 @@
       "source": "nordic",
       "source-layer": "transportation",
       "minzoom": 8,
-      "filter": ["==", ["get", "class"], "rail"],
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "rail"
+      ],
       "paint": {
         "line-color": "#6e6e78",
-        "line-opacity": ["case", ["==", ["get", "brunnel"], "tunnel"], 0.4, 1],
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          8, 0.8,
-          11, 2
+        "line-opacity": [
+          "case",
+          [
+            "==",
+            [
+              "get",
+              "brunnel"
+            ],
+            "tunnel"
+          ],
+          0.4,
+          1
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          8,
+          0.8,
+          11,
+          2
         ]
       }
     },
@@ -143,16 +222,44 @@
       "source": "nordic",
       "source-layer": "transportation",
       "minzoom": 10,
-      "filter": ["all",
-        ["==", ["get", "class"], "rail"],
-        ["!=", ["get", "brunnel"], "tunnel"]
+      "filter": [
+        "all",
+        [
+          "==",
+          [
+            "get",
+            "class"
+          ],
+          "rail"
+        ],
+        [
+          "!=",
+          [
+            "get",
+            "brunnel"
+          ],
+          "tunnel"
+        ]
       ],
       "paint": {
         "line-color": "#ffffff",
-        "line-dasharray": [2, 2.5],
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          10, 0.6,
-          11, 1
+        "line-dasharray": [
+          2,
+          2.5
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          10,
+          0.6,
+          11,
+          1
         ]
       }
     },
@@ -162,11 +269,33 @@
       "source": "nordic",
       "source-layer": "transportation",
       "minzoom": 11,
-      "filter": ["==", ["get", "class"], "transit"],
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "transit"
+      ],
       "paint": {
         "line-color": "#9a9aa6",
-        "line-opacity": ["case", ["==", ["get", "brunnel"], "tunnel"], 0.4, 1],
-        "line-dasharray": [3, 1.5],
+        "line-opacity": [
+          "case",
+          [
+            "==",
+            [
+              "get",
+              "brunnel"
+            ],
+            "tunnel"
+          ],
+          0.4,
+          1
+        ],
+        "line-dasharray": [
+          3,
+          1.5
+        ],
         "line-width": 1.2
       }
     },
@@ -176,12 +305,35 @@
       "source": "nordic",
       "source-layer": "transportation",
       "minzoom": 6,
-      "filter": ["in", ["get", "class"], ["literal", ["motorway", "trunk"]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "class"
+        ],
+        [
+          "literal",
+          [
+            "motorway",
+            "trunk"
+          ]
+        ]
+      ],
       "paint": {
         "line-color": "#7dab56",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          6, 2,
-          11, 5
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          6,
+          2,
+          11,
+          5
         ]
       }
     },
@@ -191,12 +343,29 @@
       "source": "nordic",
       "source-layer": "transportation",
       "minzoom": 6,
-      "filter": ["==", ["get", "class"], "primary"],
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "primary"
+      ],
       "paint": {
         "line-color": "#c0735e",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          6, 1.8,
-          11, 4
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          6,
+          1.8,
+          11,
+          4
         ]
       }
     },
@@ -206,12 +375,29 @@
       "source": "nordic",
       "source-layer": "transportation",
       "minzoom": 9,
-      "filter": ["==", ["get", "class"], "secondary"],
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "secondary"
+      ],
       "paint": {
         "line-color": "#c4b05a",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          9, 1.4,
-          11, 2.5
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          9,
+          1.4,
+          11,
+          2.5
         ]
       }
     },
@@ -221,12 +407,35 @@
       "source": "nordic",
       "source-layer": "transportation",
       "minzoom": 6,
-      "filter": ["in", ["get", "class"], ["literal", ["motorway", "trunk"]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "class"
+        ],
+        [
+          "literal",
+          [
+            "motorway",
+            "trunk"
+          ]
+        ]
+      ],
       "paint": {
         "line-color": "#b2d88e",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          6, 1,
-          11, 3.5
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          6,
+          1,
+          11,
+          3.5
         ]
       }
     },
@@ -236,12 +445,29 @@
       "source": "nordic",
       "source-layer": "transportation",
       "minzoom": 6,
-      "filter": ["==", ["get", "class"], "primary"],
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "primary"
+      ],
       "paint": {
         "line-color": "#e8a48c",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          6, 1,
-          11, 2.5
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          6,
+          1,
+          11,
+          2.5
         ]
       }
     },
@@ -251,12 +477,29 @@
       "source": "nordic",
       "source-layer": "transportation",
       "minzoom": 9,
-      "filter": ["==", ["get", "class"], "secondary"],
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "secondary"
+      ],
       "paint": {
         "line-color": "#f0d87a",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          9, 0.8,
-          11, 1.5
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          9,
+          0.8,
+          11,
+          1.5
         ]
       }
     },
@@ -266,7 +509,20 @@
       "source": "nordic",
       "source-layer": "transportation",
       "minzoom": 9,
-      "filter": ["in", ["get", "class"], ["literal", ["tertiary", "minor"]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "class"
+        ],
+        [
+          "literal",
+          [
+            "tertiary",
+            "minor"
+          ]
+        ]
+      ],
       "paint": {
         "line-color": "#ffffff",
         "line-width": 1
@@ -310,7 +566,10 @@
       "minzoom": 7,
       "paint": {
         "line-color": "#a0a0a0",
-        "line-dasharray": [4, 4],
+        "line-dasharray": [
+          4,
+          4
+        ],
         "line-width": 1
       }
     },
@@ -322,10 +581,56 @@
       "minzoom": 7,
       "paint": {
         "line-color": "#6e6e78",
-        "line-opacity": ["case", ["<=", ["get", "Vertikaali"], -1], 0.4, 1],
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          7, ["case", [">=", ["get", "Raideluku"], 2], 1.2, 0.8],
-          11, ["case", [">=", ["get", "Raideluku"], 2], 3, 2]
+        "line-opacity": [
+          "case",
+          [
+            "<=",
+            [
+              "get",
+              "Vertikaali"
+            ],
+            -1
+          ],
+          0.4,
+          1
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          7,
+          [
+            "case",
+            [
+              ">=",
+              [
+                "get",
+                "Raideluku"
+              ],
+              2
+            ],
+            1.2,
+            0.8
+          ],
+          11,
+          [
+            "case",
+            [
+              ">=",
+              [
+                "get",
+                "Raideluku"
+              ],
+              2
+            ],
+            3,
+            2
+          ]
         ]
       }
     },
@@ -335,13 +640,57 @@
       "source": "finland",
       "source-layer": "rautatie",
       "minzoom": 9,
-      "filter": [">", ["get", "Vertikaali"], -1],
+      "filter": [
+        ">",
+        [
+          "get",
+          "Vertikaali"
+        ],
+        -1
+      ],
       "paint": {
         "line-color": "#ffffff",
-        "line-dasharray": [2, 2.5],
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          9, ["case", [">=", ["get", "Raideluku"], 2], 0.7, 0.5],
-          11, ["case", [">=", ["get", "Raideluku"], 2], 1.5, 1]
+        "line-dasharray": [
+          2,
+          2.5
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          9,
+          [
+            "case",
+            [
+              ">=",
+              [
+                "get",
+                "Raideluku"
+              ],
+              2
+            ],
+            0.7,
+            0.5
+          ],
+          11,
+          [
+            "case",
+            [
+              ">=",
+              [
+                "get",
+                "Raideluku"
+              ],
+              2
+            ],
+            1.5,
+            1
+          ]
         ]
       }
     },
@@ -351,12 +700,35 @@
       "source": "finland",
       "source-layer": "tie",
       "minzoom": 7,
-      "filter": ["in", ["get", "Kohdeluokk"], ["literal", [12111, 12112]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "Kohdeluokk"
+        ],
+        [
+          "literal",
+          [
+            12111,
+            12112
+          ]
+        ]
+      ],
       "paint": {
         "line-color": "#7dab56",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          7, 2,
-          11, 5
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          7,
+          2,
+          11,
+          5
         ]
       }
     },
@@ -366,12 +738,34 @@
       "source": "finland",
       "source-layer": "tie",
       "minzoom": 7,
-      "filter": ["in", ["get", "Kohdeluokk"], ["literal", [12121]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "Kohdeluokk"
+        ],
+        [
+          "literal",
+          [
+            12121
+          ]
+        ]
+      ],
       "paint": {
         "line-color": "#c0735e",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          7, 1.8,
-          11, 4
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          7,
+          1.8,
+          11,
+          4
         ]
       }
     },
@@ -381,12 +775,34 @@
       "source": "finland",
       "source-layer": "tie",
       "minzoom": 9,
-      "filter": ["in", ["get", "Kohdeluokk"], ["literal", [12122]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "Kohdeluokk"
+        ],
+        [
+          "literal",
+          [
+            12122
+          ]
+        ]
+      ],
       "paint": {
         "line-color": "#c4b05a",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          9, 1.4,
-          11, 2.5
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          9,
+          1.4,
+          11,
+          2.5
         ]
       }
     },
@@ -396,12 +812,35 @@
       "source": "finland",
       "source-layer": "tie",
       "minzoom": 7,
-      "filter": ["in", ["get", "Kohdeluokk"], ["literal", [12111, 12112]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "Kohdeluokk"
+        ],
+        [
+          "literal",
+          [
+            12111,
+            12112
+          ]
+        ]
+      ],
       "paint": {
         "line-color": "#b2d88e",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          7, 1.2,
-          11, 3.5
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          7,
+          1.2,
+          11,
+          3.5
         ]
       }
     },
@@ -411,12 +850,34 @@
       "source": "finland",
       "source-layer": "tie",
       "minzoom": 7,
-      "filter": ["in", ["get", "Kohdeluokk"], ["literal", [12121]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "Kohdeluokk"
+        ],
+        [
+          "literal",
+          [
+            12121
+          ]
+        ]
+      ],
       "paint": {
         "line-color": "#e8a48c",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          7, 1,
-          11, 2.5
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          7,
+          1,
+          11,
+          2.5
         ]
       }
     },
@@ -426,12 +887,34 @@
       "source": "finland",
       "source-layer": "tie",
       "minzoom": 9,
-      "filter": ["in", ["get", "Kohdeluokk"], ["literal", [12122]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "Kohdeluokk"
+        ],
+        [
+          "literal",
+          [
+            12122
+          ]
+        ]
+      ],
       "paint": {
         "line-color": "#f0d87a",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          9, 0.8,
-          11, 1.5
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          9,
+          0.8,
+          11,
+          1.5
         ]
       }
     },
@@ -441,7 +924,20 @@
       "source": "finland",
       "source-layer": "tie",
       "minzoom": 9,
-      "filter": ["in", ["get", "Kohdeluokk"], ["literal", [12131, 12132]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "Kohdeluokk"
+        ],
+        [
+          "literal",
+          [
+            12131,
+            12132
+          ]
+        ]
+      ],
       "paint": {
         "line-color": "#ffffff",
         "line-width": 0.8
@@ -453,7 +949,19 @@
       "source": "finland",
       "source-layer": "tie",
       "minzoom": 10,
-      "filter": ["in", ["get", "Kohdeluokk"], ["literal", [12141]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "Kohdeluokk"
+        ],
+        [
+          "literal",
+          [
+            12141
+          ]
+        ]
+      ],
       "paint": {
         "line-color": "#ffffff",
         "line-width": 0.5,
@@ -466,117 +974,27 @@
       "source": "finland",
       "source-layer": "tie",
       "minzoom": 9,
-      "filter": ["in", ["get", "Kohdeluokk"], ["literal", [12151, 12152]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "Kohdeluokk"
+        ],
+        [
+          "literal",
+          [
+            12151,
+            12152
+          ]
+        ]
+      ],
       "paint": {
         "line-color": "#8bb4d8",
-        "line-dasharray": [6, 3],
+        "line-dasharray": [
+          6,
+          3
+        ],
         "line-width": 1
-      }
-    },
-    {
-      "id": "world-country-labels",
-      "type": "symbol",
-      "source": "world",
-      "source-layer": "country_labels",
-      "maxzoom": 6,
-      "layout": {
-        "text-field": ["get", "NAME"],
-        "text-font": ["Open Sans Semibold"],
-        "text-size": ["interpolate", ["linear"], ["zoom"],
-          0, 10,
-          6, 14
-        ],
-        "symbol-sort-key": ["coalesce", ["get", "LABELRANK"], 9]
-      },
-      "paint": {
-        "text-color": "#555555",
-        "text-halo-color": "#ffffff",
-        "text-halo-width": 1
-      }
-    },
-    {
-      "id": "place-country",
-      "type": "symbol",
-      "source": "nordic",
-      "source-layer": "place",
-      "minzoom": 6,
-      "filter": ["==", ["get", "class"], "country"],
-      "layout": {
-        "text-field": ["coalesce", ["get", "name:fi"], ["get", "name"]],
-        "text-font": ["Open Sans Semibold"],
-        "text-size": 14,
-        "symbol-sort-key": ["coalesce", ["get", "rank"], 9]
-      },
-      "paint": {
-        "text-color": "#555555",
-        "text-halo-color": "#ffffff",
-        "text-halo-width": 1
-      }
-    },
-    {
-      "id": "place-city",
-      "type": "symbol",
-      "source": "nordic",
-      "source-layer": "place",
-      "minzoom": 5,
-      "filter": ["==", ["get", "class"], "city"],
-      "layout": {
-        "text-field": ["coalesce", ["get", "name:fi"], ["get", "name"]],
-        "text-font": ["Open Sans Semibold"],
-        "text-size": ["interpolate", ["exponential", 1.2], ["zoom"],
-          5, 11,
-          11, 18
-        ],
-        "symbol-sort-key": ["coalesce", ["get", "rank"], 15]
-      },
-      "paint": {
-        "text-color": "#333333",
-        "text-halo-color": "#ffffff",
-        "text-halo-width": 1
-      }
-    },
-    {
-      "id": "place-town",
-      "type": "symbol",
-      "source": "nordic",
-      "source-layer": "place",
-      "minzoom": 8,
-      "filter": ["==", ["get", "class"], "town"],
-      "layout": {
-        "text-field": ["coalesce", ["get", "name:fi"], ["get", "name"]],
-        "text-font": ["Open Sans Regular"],
-        "text-size": ["interpolate", ["exponential", 1.2], ["zoom"],
-          8, 10,
-          11, 14
-        ],
-        "symbol-sort-key": ["coalesce", ["get", "rank"], 15]
-      },
-      "paint": {
-        "text-color": "#333333",
-        "text-halo-color": "#ffffff",
-        "text-halo-width": 1
-      }
-    },
-    {
-      "id": "place-village",
-      "type": "symbol",
-      "source": "nordic",
-      "source-layer": "place",
-      "minzoom": 10,
-      "filter": ["==", ["get", "class"], "village"],
-      "layout": {
-        "text-field": ["coalesce", ["get", "name:fi"], ["get", "name"]],
-        "text-font": ["Open Sans Regular"],
-        "text-size": ["interpolate", ["exponential", 1.2], ["zoom"],
-          10, 10,
-          11, 12
-        ],
-        "symbol-sort-key": ["coalesce", ["get", "rank"], 15]
-      },
-      "paint": {
-        "text-color": "#666666",
-        "text-halo-color": "#ffffff",
-        "text-halo-width": 1
       }
     },
     {
@@ -585,13 +1003,34 @@
       "source": "finland-hd",
       "source-layer": "landcover",
       "minzoom": 12,
-      "filter": ["in", ["get", "class"], ["literal", ["wood", "grass", "farmland"]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "class"
+        ],
+        [
+          "literal",
+          [
+            "wood",
+            "grass",
+            "farmland"
+          ]
+        ]
+      ],
       "paint": {
         "fill-color": [
-          "match", ["get", "class"],
-          "wood", "#dce8d4",
-          "grass", "#e4ecd8",
-          "farmland", "#eeeadc",
+          "match",
+          [
+            "get",
+            "class"
+          ],
+          "wood",
+          "#dce8d4",
+          "grass",
+          "#e4ecd8",
+          "farmland",
+          "#eeeadc",
           "#e8e8e0"
         ],
         "fill-opacity": 0.6
@@ -624,13 +1063,31 @@
       "source": "finland-hd",
       "source-layer": "boundary",
       "minzoom": 12,
-      "filter": ["all",
-        ["<=", ["get", "admin_level"], 6],
-        ["!=", ["get", "maritime"], 1]
+      "filter": [
+        "all",
+        [
+          "<=",
+          [
+            "get",
+            "admin_level"
+          ],
+          6
+        ],
+        [
+          "!=",
+          [
+            "get",
+            "maritime"
+          ],
+          1
+        ]
       ],
       "paint": {
         "line-color": "#b0a8b0",
-        "line-dasharray": [4, 4],
+        "line-dasharray": [
+          4,
+          4
+        ],
         "line-width": 1
       }
     },
@@ -640,13 +1097,48 @@
       "source": "finland-hd",
       "source-layer": "transportation",
       "minzoom": 12,
-      "filter": ["in", ["get", "class"], ["literal", ["rail", "transit"]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "class"
+        ],
+        [
+          "literal",
+          [
+            "rail",
+            "transit"
+          ]
+        ]
+      ],
       "paint": {
         "line-color": "#6e6e78",
-        "line-opacity": ["case", ["==", ["get", "brunnel"], "tunnel"], 0.4, 1],
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          12, 2,
-          13, 2.6
+        "line-opacity": [
+          "case",
+          [
+            "==",
+            [
+              "get",
+              "brunnel"
+            ],
+            "tunnel"
+          ],
+          0.4,
+          1
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          2,
+          13,
+          2.6
         ]
       }
     },
@@ -656,16 +1148,50 @@
       "source": "finland-hd",
       "source-layer": "transportation",
       "minzoom": 12,
-      "filter": ["all",
-        ["in", ["get", "class"], ["literal", ["rail", "transit"]]],
-        ["!=", ["get", "brunnel"], "tunnel"]
+      "filter": [
+        "all",
+        [
+          "in",
+          [
+            "get",
+            "class"
+          ],
+          [
+            "literal",
+            [
+              "rail",
+              "transit"
+            ]
+          ]
+        ],
+        [
+          "!=",
+          [
+            "get",
+            "brunnel"
+          ],
+          "tunnel"
+        ]
       ],
       "paint": {
         "line-color": "#ffffff",
-        "line-dasharray": [2, 2.5],
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          12, 1,
-          13, 1.4
+        "line-dasharray": [
+          2,
+          2.5
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          1,
+          13,
+          1.4
         ]
       }
     },
@@ -675,12 +1201,35 @@
       "source": "finland-hd",
       "source-layer": "transportation",
       "minzoom": 12,
-      "filter": ["in", ["get", "class"], ["literal", ["motorway", "trunk"]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "class"
+        ],
+        [
+          "literal",
+          [
+            "motorway",
+            "trunk"
+          ]
+        ]
+      ],
       "paint": {
         "line-color": "#7dab56",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          12, 5,
-          13, 7
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          5,
+          13,
+          7
         ]
       }
     },
@@ -690,12 +1239,29 @@
       "source": "finland-hd",
       "source-layer": "transportation",
       "minzoom": 12,
-      "filter": ["==", ["get", "class"], "primary"],
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "primary"
+      ],
       "paint": {
         "line-color": "#c0735e",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          12, 4,
-          13, 5.5
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          4,
+          13,
+          5.5
         ]
       }
     },
@@ -705,12 +1271,29 @@
       "source": "finland-hd",
       "source-layer": "transportation",
       "minzoom": 12,
-      "filter": ["==", ["get", "class"], "secondary"],
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "secondary"
+      ],
       "paint": {
         "line-color": "#c4b05a",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          12, 2.5,
-          13, 3.5
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          2.5,
+          13,
+          3.5
         ]
       }
     },
@@ -720,12 +1303,35 @@
       "source": "finland-hd",
       "source-layer": "transportation",
       "minzoom": 12,
-      "filter": ["in", ["get", "class"], ["literal", ["motorway", "trunk"]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "class"
+        ],
+        [
+          "literal",
+          [
+            "motorway",
+            "trunk"
+          ]
+        ]
+      ],
       "paint": {
         "line-color": "#b2d88e",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          12, 3.5,
-          13, 5
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          3.5,
+          13,
+          5
         ]
       }
     },
@@ -735,12 +1341,29 @@
       "source": "finland-hd",
       "source-layer": "transportation",
       "minzoom": 12,
-      "filter": ["==", ["get", "class"], "primary"],
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "primary"
+      ],
       "paint": {
         "line-color": "#e8a48c",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          12, 2.5,
-          13, 3.5
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          2.5,
+          13,
+          3.5
         ]
       }
     },
@@ -750,12 +1373,29 @@
       "source": "finland-hd",
       "source-layer": "transportation",
       "minzoom": 12,
-      "filter": ["==", ["get", "class"], "secondary"],
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "secondary"
+      ],
       "paint": {
         "line-color": "#f0d87a",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          12, 1.5,
-          13, 2.5
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          1.5,
+          13,
+          2.5
         ]
       }
     },
@@ -765,12 +1405,37 @@
       "source": "finland-hd",
       "source-layer": "transportation",
       "minzoom": 12,
-      "filter": ["in", ["get", "class"], ["literal", ["tertiary", "minor", "service", "path"]]],
+      "filter": [
+        "in",
+        [
+          "get",
+          "class"
+        ],
+        [
+          "literal",
+          [
+            "tertiary",
+            "minor",
+            "service",
+            "path"
+          ]
+        ]
+      ],
       "paint": {
         "line-color": "#ffffff",
-        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          12, 1.5,
-          13, 2
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.4
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          1.5,
+          13,
+          2
         ]
       }
     },
@@ -786,21 +1451,407 @@
       }
     },
     {
+      "id": "station-circle",
+      "type": "circle",
+      "source": "stations",
+      "minzoom": 9,
+      "filter": [
+        "==",
+        [
+          "get",
+          "rank"
+        ],
+        0
+      ],
+      "paint": {
+        "circle-color": "#333333",
+        "circle-radius": [
+          "interpolate",
+          [
+            "exponential",
+            1.2
+          ],
+          [
+            "zoom"
+          ],
+          9,
+          2.5,
+          13,
+          5
+        ],
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-width": 1.5
+      }
+    },
+    {
+      "id": "station-halt-circle",
+      "type": "circle",
+      "source": "stations",
+      "minzoom": 11,
+      "filter": [
+        "==",
+        [
+          "get",
+          "rank"
+        ],
+        1
+      ],
+      "paint": {
+        "circle-color": "#ffffff",
+        "circle-radius": [
+          "interpolate",
+          [
+            "exponential",
+            1.2
+          ],
+          [
+            "zoom"
+          ],
+          11,
+          2.5,
+          13,
+          4
+        ],
+        "circle-stroke-color": "#333333",
+        "circle-stroke-width": 1.5
+      }
+    },
+    {
+      "id": "station-transit-circle",
+      "type": "circle",
+      "source": "stations",
+      "minzoom": 11,
+      "filter": [
+        "==",
+        [
+          "get",
+          "rank"
+        ],
+        2
+      ],
+      "paint": {
+        "circle-color": "#e35205",
+        "circle-radius": [
+          "interpolate",
+          [
+            "exponential",
+            1.2
+          ],
+          [
+            "zoom"
+          ],
+          11,
+          3,
+          13,
+          5
+        ],
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-width": 1.5
+      }
+    },
+    {
+      "id": "world-country-labels",
+      "type": "symbol",
+      "source": "world",
+      "source-layer": "country_labels",
+      "maxzoom": 6,
+      "layout": {
+        "text-field": [
+          "get",
+          "NAME"
+        ],
+        "text-font": [
+          "Open Sans Semibold"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          0,
+          10,
+          6,
+          14
+        ],
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "LABELRANK"
+          ],
+          9
+        ]
+      },
+      "paint": {
+        "text-color": "#555555",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "place-country",
+      "type": "symbol",
+      "source": "nordic",
+      "source-layer": "place",
+      "minzoom": 6,
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "country"
+      ],
+      "layout": {
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:fi"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Open Sans Semibold"
+        ],
+        "text-size": 14,
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          9
+        ]
+      },
+      "paint": {
+        "text-color": "#555555",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "place-city",
+      "type": "symbol",
+      "source": "nordic",
+      "source-layer": "place",
+      "minzoom": 5,
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "city"
+      ],
+      "layout": {
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:fi"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Open Sans Semibold"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "exponential",
+            1.2
+          ],
+          [
+            "zoom"
+          ],
+          5,
+          11,
+          11,
+          18
+        ],
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          15
+        ]
+      },
+      "paint": {
+        "text-color": "#333333",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "place-town",
+      "type": "symbol",
+      "source": "nordic",
+      "source-layer": "place",
+      "minzoom": 8,
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "town"
+      ],
+      "layout": {
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:fi"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Open Sans Regular"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "exponential",
+            1.2
+          ],
+          [
+            "zoom"
+          ],
+          8,
+          10,
+          11,
+          14
+        ],
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          15
+        ]
+      },
+      "paint": {
+        "text-color": "#333333",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "place-village",
+      "type": "symbol",
+      "source": "nordic",
+      "source-layer": "place",
+      "minzoom": 10,
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "village"
+      ],
+      "layout": {
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:fi"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Open Sans Regular"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "exponential",
+            1.2
+          ],
+          [
+            "zoom"
+          ],
+          10,
+          10,
+          11,
+          12
+        ],
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          15
+        ]
+      },
+      "paint": {
+        "text-color": "#666666",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    },
+    {
       "id": "finland-road-number",
       "type": "symbol",
       "source": "finland",
       "source-layer": "tie",
       "minzoom": 6,
       "maxzoom": 12,
-      "filter": ["all",
-        ["has", "Tienumero"],
-        [">", "Tienumero", 0],
-        ["<", "Tienumero", 10000]
+      "filter": [
+        "all",
+        [
+          "has",
+          "Tienumero"
+        ],
+        [
+          ">",
+          "Tienumero",
+          0
+        ],
+        [
+          "<",
+          "Tienumero",
+          10000
+        ]
       ],
       "layout": {
         "text-field": "{Tienumero}",
-        "text-font": ["Open Sans Bold"],
-        "text-size": ["interpolate", ["linear"], ["zoom"], 6, 8, 11, 11],
+        "text-font": [
+          "Open Sans Bold"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          6,
+          8,
+          11,
+          11
+        ],
         "symbol-placement": "line",
         "symbol-spacing": 250,
         "text-pitch-alignment": "viewport",
@@ -809,16 +1860,64 @@
       "paint": {
         "text-color": [
           "case",
-          ["<", ["get", "Tienumero"], 40], "#ffffff",
-          ["<", ["get", "Tienumero"], 100], "#000000",
-          ["<", ["get", "Tienumero"], 1000], "#000000",
+          [
+            "<",
+            [
+              "get",
+              "Tienumero"
+            ],
+            40
+          ],
+          "#ffffff",
+          [
+            "<",
+            [
+              "get",
+              "Tienumero"
+            ],
+            100
+          ],
+          "#000000",
+          [
+            "<",
+            [
+              "get",
+              "Tienumero"
+            ],
+            1000
+          ],
+          "#000000",
           "#ffffff"
         ],
         "text-halo-color": [
           "case",
-          ["<", ["get", "Tienumero"], 40], "#cc0000",
-          ["<", ["get", "Tienumero"], 100], "#ffcc00",
-          ["<", ["get", "Tienumero"], 1000], "#ffffff",
+          [
+            "<",
+            [
+              "get",
+              "Tienumero"
+            ],
+            40
+          ],
+          "#cc0000",
+          [
+            "<",
+            [
+              "get",
+              "Tienumero"
+            ],
+            100
+          ],
+          "#ffcc00",
+          [
+            "<",
+            [
+              "get",
+              "Tienumero"
+            ],
+            1000
+          ],
+          "#ffffff",
           "#0033cc"
         ],
         "text-halo-width": 2.5
@@ -830,10 +1929,15 @@
       "source": "finland-hd",
       "source-layer": "transportation_name",
       "minzoom": 12,
-      "filter": ["has", "ref"],
+      "filter": [
+        "has",
+        "ref"
+      ],
       "layout": {
         "text-field": "{ref}",
-        "text-font": ["Open Sans Bold"],
+        "text-font": [
+          "Open Sans Bold"
+        ],
         "text-size": 11,
         "symbol-placement": "line",
         "symbol-spacing": 250,
@@ -843,18 +1947,82 @@
       "paint": {
         "text-color": [
           "case",
-          ["==", ["get", "class"], "motorway"], "#ffffff",
-          ["==", ["get", "class"], "trunk"], "#ffffff",
-          ["==", ["get", "class"], "primary"], "#000000",
-          ["==", ["get", "class"], "secondary"], "#000000",
+          [
+            "==",
+            [
+              "get",
+              "class"
+            ],
+            "motorway"
+          ],
+          "#ffffff",
+          [
+            "==",
+            [
+              "get",
+              "class"
+            ],
+            "trunk"
+          ],
+          "#ffffff",
+          [
+            "==",
+            [
+              "get",
+              "class"
+            ],
+            "primary"
+          ],
+          "#000000",
+          [
+            "==",
+            [
+              "get",
+              "class"
+            ],
+            "secondary"
+          ],
+          "#000000",
           "#ffffff"
         ],
         "text-halo-color": [
           "case",
-          ["==", ["get", "class"], "motorway"], "#009900",
-          ["==", ["get", "class"], "trunk"], "#cc0000",
-          ["==", ["get", "class"], "primary"], "#ffcc00",
-          ["==", ["get", "class"], "secondary"], "#ffffff",
+          [
+            "==",
+            [
+              "get",
+              "class"
+            ],
+            "motorway"
+          ],
+          "#009900",
+          [
+            "==",
+            [
+              "get",
+              "class"
+            ],
+            "trunk"
+          ],
+          "#cc0000",
+          [
+            "==",
+            [
+              "get",
+              "class"
+            ],
+            "primary"
+          ],
+          "#ffcc00",
+          [
+            "==",
+            [
+              "get",
+              "class"
+            ],
+            "secondary"
+          ],
+          "#ffffff",
           "#0033cc"
         ],
         "text-halo-width": 2.5
@@ -867,8 +2035,20 @@
       "source-layer": "transportation_name",
       "minzoom": 13,
       "layout": {
-        "text-field": ["coalesce", ["get", "name:fi"], ["get", "name"]],
-        "text-font": ["Open Sans Regular"],
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:fi"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Open Sans Regular"
+        ],
         "text-size": 10,
         "symbol-placement": "line",
         "text-max-angle": 30
@@ -886,8 +2066,20 @@
       "source-layer": "water_name",
       "minzoom": 12,
       "layout": {
-        "text-field": ["coalesce", ["get", "name:fi"], ["get", "name"]],
-        "text-font": ["Open Sans Regular"],
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:fi"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Open Sans Regular"
+        ],
         "text-size": 11,
         "symbol-placement": "point"
       },
@@ -903,15 +2095,51 @@
       "source": "finland-hd",
       "source-layer": "place",
       "minzoom": 12,
-      "filter": ["==", ["get", "class"], "city"],
-      "layout": {
-        "text-field": ["coalesce", ["get", "name:fi"], ["get", "name"]],
-        "text-font": ["Open Sans Semibold"],
-        "text-size": ["interpolate", ["exponential", 1.2], ["zoom"],
-          5, 11,
-          11, 18
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
         ],
-        "symbol-sort-key": ["coalesce", ["get", "rank"], 15]
+        "city"
+      ],
+      "layout": {
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:fi"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Open Sans Semibold"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "exponential",
+            1.2
+          ],
+          [
+            "zoom"
+          ],
+          5,
+          11,
+          11,
+          18
+        ],
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          15
+        ]
       },
       "paint": {
         "text-color": "#333333",
@@ -925,15 +2153,51 @@
       "source": "finland-hd",
       "source-layer": "place",
       "minzoom": 12,
-      "filter": ["==", ["get", "class"], "town"],
-      "layout": {
-        "text-field": ["coalesce", ["get", "name:fi"], ["get", "name"]],
-        "text-font": ["Open Sans Regular"],
-        "text-size": ["interpolate", ["exponential", 1.2], ["zoom"],
-          8, 10,
-          11, 14
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
         ],
-        "symbol-sort-key": ["coalesce", ["get", "rank"], 15]
+        "town"
+      ],
+      "layout": {
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:fi"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Open Sans Regular"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "exponential",
+            1.2
+          ],
+          [
+            "zoom"
+          ],
+          8,
+          10,
+          11,
+          14
+        ],
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          15
+        ]
       },
       "paint": {
         "text-color": "#333333",
@@ -947,15 +2211,59 @@
       "source": "finland-hd",
       "source-layer": "place",
       "minzoom": 12,
-      "filter": ["in", ["get", "class"], ["literal", ["village", "hamlet", "neighbourhood", "isolated_dwelling"]]],
-      "layout": {
-        "text-field": ["coalesce", ["get", "name:fi"], ["get", "name"]],
-        "text-font": ["Open Sans Regular"],
-        "text-size": ["interpolate", ["exponential", 1.2], ["zoom"],
-          12, 10,
-          14, 13
+      "filter": [
+        "in",
+        [
+          "get",
+          "class"
         ],
-        "symbol-sort-key": ["coalesce", ["get", "rank"], 15]
+        [
+          "literal",
+          [
+            "village",
+            "hamlet",
+            "neighbourhood",
+            "isolated_dwelling"
+          ]
+        ]
+      ],
+      "layout": {
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:fi"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Open Sans Regular"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "exponential",
+            1.2
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          10,
+          14,
+          13
+        ],
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          15
+        ]
       },
       "paint": {
         "text-color": "#666666",
@@ -964,68 +2272,48 @@
       }
     },
     {
-      "id": "station-circle",
-      "type": "circle",
-      "source": "stations",
-      "minzoom": 9,
-      "filter": ["==", ["get", "rank"], 0],
-      "paint": {
-        "circle-color": "#333333",
-        "circle-radius": ["interpolate", ["exponential", 1.2], ["zoom"],
-          9, 2.5,
-          13, 5
-        ],
-        "circle-stroke-color": "#ffffff",
-        "circle-stroke-width": 1.5
-      }
-    },
-    {
-      "id": "station-halt-circle",
-      "type": "circle",
-      "source": "stations",
-      "minzoom": 11,
-      "filter": ["==", ["get", "rank"], 1],
-      "paint": {
-        "circle-color": "#ffffff",
-        "circle-radius": ["interpolate", ["exponential", 1.2], ["zoom"],
-          11, 2.5,
-          13, 4
-        ],
-        "circle-stroke-color": "#333333",
-        "circle-stroke-width": 1.5
-      }
-    },
-    {
-      "id": "station-transit-circle",
-      "type": "circle",
-      "source": "stations",
-      "minzoom": 11,
-      "filter": ["==", ["get", "rank"], 2],
-      "paint": {
-        "circle-color": "#e35205",
-        "circle-radius": ["interpolate", ["exponential", 1.2], ["zoom"],
-          11, 3,
-          13, 5
-        ],
-        "circle-stroke-color": "#ffffff",
-        "circle-stroke-width": 1.5
-      }
-    },
-    {
       "id": "station-label",
       "type": "symbol",
       "source": "stations",
       "minzoom": 11,
       "layout": {
-        "text-field": ["coalesce", ["get", "name:fi"], ["get", "name"]],
-        "text-font": ["Open Sans Regular"],
-        "text-size": ["interpolate", ["exponential", 1.2], ["zoom"],
-          11, 10,
-          13, 12
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:fi"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Open Sans Regular"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "exponential",
+            1.2
+          ],
+          [
+            "zoom"
+          ],
+          11,
+          10,
+          13,
+          12
         ],
         "text-anchor": "left",
-        "text-offset": [0.6, 0],
-        "symbol-sort-key": ["get", "rank"]
+        "text-offset": [
+          0.6,
+          0
+        ],
+        "symbol-sort-key": [
+          "get",
+          "rank"
+        ]
       },
       "paint": {
         "text-color": "#333333",
