@@ -38,53 +38,36 @@ merge_layer "TieViiva" "$CACHE/tie.geojson"
 merge_layer "RautatieViiva" "$CACHE/rautatie.geojson"
 merge_layer "TaajamaAlue" "$CACHE/taajama.geojson"
 merge_layer "HallintoalueRaja" "$CACHE/raja.geojson"
+# Kept only so the data stays cached and re-addable: `nimisto` is not tiled.
+# OpenMapTiles `place` labels from nordic-baltic.pmtiles cover Finland instead.
 merge_layer "KarttanimiPiste" "$CACHE/nimisto_unsorted.geojson"
-
-echo "Sorting KarttanimiPiste by scalerelev..."
-if [ -f "$CACHE/nimisto_unsorted.geojson" ]; then
-  rm -f "$CACHE/nimisto.geojson"
-  ogr2ogr -f GeoJSON -sql "SELECT * FROM merged ORDER BY scalerelev DESC" "$CACHE/nimisto.geojson" "$CACHE/nimisto_unsorted.geojson"
-fi
-
-echo "Adding per-feature minzoom from scalerelev..."
-if [ -f "$CACHE/nimisto.geojson" ]; then
-  CACHE="$CACHE" python3 -c "
-import json, os
-
-cache = os.environ['CACHE']
-
-def scalerelev_to_minzoom(sr):
-    if not sr: return 11
-    if sr >= 8000000: return 3
-    if sr >= 4500000: return 5
-    if sr >= 2000000: return 6
-    if sr >= 1000000: return 7
-    if sr >= 500000: return 9
-    return 11
-
-with open(f'{cache}/nimisto.geojson') as f:
-    data = json.load(f)
-for feat in data['features']:
-    sr = feat['properties'].get('scalerelev') or 0
-    feat['tippecanoe'] = {'minzoom': scalerelev_to_minzoom(sr)}
-with open(f'{cache}/nimisto.geojson', 'w') as f:
-    json.dump(data, f, ensure_ascii=False)
-print(f'Added minzoom to {len(data[\"features\"])} features')
-"
-fi
 
 echo "Generating PMTiles with tippecanoe..."
 # Find which files successfully generated (some layers might be empty or missing)
 GEOJSONS=""
-for f in hallinto vesi tie rautatie taajama raja nimisto; do
+for f in hallinto vesi tie rautatie taajama raja; do
   if [ -f "$CACHE/${f}.geojson" ]; then
     GEOJSONS="$GEOJSONS $CACHE/${f}.geojson"
   fi
 done
 
+# MML ships every road class at full detail, but the style only draws motorway
+# and primary below z9 — 86.5% of the `tie` bytes in a z7 tile were classes
+# nothing rendered until z9/z10. Filter per zoom so the wire only carries what
+# is drawn. KEEP IN SYNC with the tie-* layer minzooms in
+# scripts/style.template.json (secondary/tertiary/ferry z9, track z10).
+# shellcheck disable=SC2016 # $zoom is a tippecanoe filter variable, not a shell
+# variable — it must reach tippecanoe unexpanded.
+TIE_FILTER='{"tie":["any",
+  ["in","Kohdeluokk",12111,12112,12121],
+  ["all",[">=","$zoom",9],["in","Kohdeluokk",12122,12131,12132,12151,12152]],
+  ["all",[">=","$zoom",10],["==","Kohdeluokk",12141]]]}'
+
+# -Z6: the lowest `finland` layer minzoom in the style is 6, so z0-5 tiles were
+# built (at 350-670 KB each) and never requested.
 # shellcheck disable=SC2086 # word splitting of $GEOJSONS is intentional
-tippecanoe -Z0 -z11 -o dist/finland.pmtiles --force -r1 \
-  --order-descending-by=scalerelev --drop-densest-as-needed \
-  --maximum-tile-bytes=2000000 $GEOJSONS
+tippecanoe -Z6 -z11 -o dist/finland.pmtiles --force -r1 \
+  --drop-densest-as-needed --maximum-tile-bytes=500000 \
+  -j "$TIE_FILTER" $GEOJSONS
 
 echo "Finland basemap generated: dist/finland.pmtiles"
