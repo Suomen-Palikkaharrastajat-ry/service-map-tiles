@@ -1,6 +1,6 @@
 # Basemap Generation (PMTiles)
 
-This repository generates a self-hosted vector basemap as three regional
+This repository generates a self-hosted vector basemap as five regional
 PMTiles archives plus a MapLibre style, served from GitHub Pages. Splitting
 by region keeps mobile data usage low: PMTiles archives are fetched with
 HTTP range requests, so clients only download the tiles they actually view,
@@ -37,15 +37,15 @@ appear at which zoom across the whole region, Finland included.
 Finland is part of this build on purpose: it gives seamless coastlines,
 borders and label ranking across the region.
 
-This script also writes **`dist/stations.geojson`**, a few hundred KB of
-railway station points (`railway=station` and `railway=halt`, which includes
-metro via `station=subway`; trams are excluded) extracted from the merged
-extract with `osmium tags-filter`. They cannot come from the tiles: the
-OpenMapTiles `poi` layer that holds stations is fixed at minzoom 14, above the
-z13 this project builds. Only `name*`, `railway`, `station` and a computed
-`rank` are kept.
+This script also writes **`dist/stations-nordic-baltic.geojson`** via the
+shared `scripts/extract-stations.sh`: railway station points (`railway=station`
+and `railway=halt`, which includes metro via `station=subway`; trams are
+excluded) pulled from the merged extract with `osmium tags-filter`. They cannot
+come from the tiles: the OpenMapTiles `poi` layer that holds stations is fixed
+at minzoom 14, above the z13 this project builds. Only `name*`, `railway`,
+`station` and a computed `rank` are kept.
 
-### `neighbours.pmtiles` — water + major roads for the neighbours (z0–11)
+### `neighbours.pmtiles` — water, roads and rail for the neighbours (z0–11)
 
 `scripts/nordic-baltic.poly` reaches well beyond the seven countries above:
 Benelux, most of Germany and Poland fall inside the clip polygon. Those areas
@@ -55,9 +55,21 @@ over Berlin was 9 KB of labels where the equivalent Stockholm tile was 178 KB.
 
 `scripts/generate-neighbours.sh` fills that in. Geofabrik extracts for Belgium,
 the Netherlands, Luxembourg, Germany and Poland are reduced with
-`osmium tags-filter` to water bodies, rivers/canals and the motorway/trunk/primary
-network, merged, and rendered by Planetiler with
-`--only-layers=water,waterway,transportation`.
+`osmium tags-filter` to water bodies, rivers/canals, the road network down to
+`secondary` and the railways, merged, and rendered by Planetiler with
+`--only-layers=water,waterway,transportation,transportation_name`. Station nodes
+ride along in the same filter, so the lines get the markers the Nordic ones
+have, and `transportation_name` carries the `ref` that the
+`neighbours-road-number` style layer renders as route shields — the same
+treatment Finland gets from MML `Tienumero`.
+
+Everything here was measured before being added rather than guessed at, against
+the class breakdown of nordic-baltic's transportation layer: rail is 10.6% of
+it (1.80 MB of 17.0 MB) and secondary 30.6%, which scaled to this region works
+out at a few MB each — cheap next to the water this archive already carries.
+`transportation_name` stays small for a different reason: OpenMapTiles only
+emits street names from z12, above this archive's z11 ceiling, so at these zooms
+the layer is essentially just motorway and trunk refs.
 
 Three deliberate exclusions keep it cheap:
 
@@ -76,8 +88,11 @@ identical if either changes.
 ### `stations.geojson` — railway stations (all zooms)
 
 Not an archive but a plain GeoJSON source in the style, small enough that
-tiling would cost more than it saves. Written by
-`scripts/generate-nordic-baltic.sh` (see above).
+tiling would cost more than it saves. Each regional build writes its own
+`dist/stations-<region>.geojson` through `scripts/extract-stations.sh`, and
+`scripts/merge-stations.sh` (`make stations`) combines them into the single
+file the style declares. The merge tolerates a region being missing, so one
+failed build costs that region's stations rather than the whole source.
 
 ### `finland.pmtiles` — MML detail for Finland (z6–11)
 
@@ -117,9 +132,14 @@ zoom levels overzoom the regional archive's z11 tiles transparently.
 `BASE_URL=http://localhost:8080` for local testing). Layer plan,
 bottom-to-top: world fill/borders (all zooms) → OpenMapTiles landcover,
 landuse, water, waterways, country boundaries, railways (z8+), roads (z5+)
-→ MML Finland layers, railways then roads (z7+) → labels (world country
-labels to z6, then OpenMapTiles `place` classes: country z6, city z5,
-town z8, village z10) → station dots and labels.
+→ MML Finland layers, railways then roads (z7+) → labels.
+
+The label block is ordered by **collision priority, not by drawing**. MapLibre
+places symbols in reverse style order, so the last symbol layer is placed first
+and wins. The order therefore runs least to most important: world country
+labels, road numbers, the `finland-hd` road/water/place labels, village,
+station labels, country, town, and `place-city` last. Get this wrong and city
+names vanish the moment the z12/z13 `finland-hd` labels switch on.
 
 That order is load-bearing. `hallinto` is an opaque fill covering all of
 Finland, so every `nordic` layer below it is masked inside Finland and shows

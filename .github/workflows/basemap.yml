@@ -97,8 +97,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dist-${{ matrix.target }}
-          # nordic-baltic also emits dist/stations.geojson; the other targets
-          # have no GeoJSON output and the missing-glob warning is harmless.
+          # nordic-baltic and neighbours also emit dist/stations-<region>.geojson;
+          # the other targets have no GeoJSON output and the missing-glob warning
+          # is harmless.
           path: |
             dist/*.pmtiles
             dist/*.geojson
@@ -110,7 +111,7 @@ jobs:
         with:
           path: |
             dist/${{ matrix.target }}.pmtiles
-            dist/stations.geojson
+            dist/stations-${{ matrix.target }}.geojson
           key: pmtiles-${{ matrix.target }}-${{ github.run_id }}
 
   assemble:
@@ -178,7 +179,7 @@ jobs:
         with:
           path: |
             dist/nordic-baltic.pmtiles
-            dist/stations.geojson
+            dist/stations-nordic-baltic.geojson
           key: pmtiles-nordic-baltic-impossible
           restore-keys: pmtiles-nordic-baltic-
 
@@ -186,7 +187,9 @@ jobs:
         if: hashFiles('dist/neighbours.pmtiles') == ''
         uses: actions/cache/restore@v4
         with:
-          path: dist/neighbours.pmtiles
+          path: |
+            dist/neighbours.pmtiles
+            dist/stations-neighbours.geojson
           key: pmtiles-neighbours-impossible
           restore-keys: pmtiles-neighbours-
 
@@ -202,12 +205,15 @@ jobs:
             fi
           done
           # style.json declares a `stations` GeoJSON source, so a missing file
-          # would break the deployed style.
-          if [ ! -f dist/stations.geojson ]; then
-            echo "::error::dist/stations.geojson is missing and no fallback was found."
+          # would break the deployed style. merge-stations.sh tolerates one
+          # region being absent, but not both.
+          if ! ls dist/stations-*.geojson >/dev/null 2>&1; then
+            echo "::error::no dist/stations-*.geojson present and no fallback was found."
             missing=$((missing + 1))
           else
-            echo "✓ dist/stations.geojson ($(du -h dist/stations.geojson | cut -f1))"
+            for f in dist/stations-*.geojson; do
+              echo "✓ $f ($(du -h "$f" | cut -f1))"
+            done
           fi
           if [ "$missing" -gt 0 ]; then
             exit 1
@@ -226,6 +232,13 @@ jobs:
         with:
           path: .cache/vendor
           key: vendor-${{ hashFiles('scripts/generate-style.sh') }}
+
+      - name: Merge stations, generate style and fonts
+        # merge-stations.sh directly, not `make stations`: in this job the
+        # regional station files arrive as artifacts, and make would try to
+        # *build* any that are missing — kicking off a full Planetiler run on
+        # the assemble runner.
+        run: devenv shell -- bash scripts/merge-stations.sh
 
       - name: Generate style and fonts
         run: devenv shell -- make style fonts

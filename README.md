@@ -16,7 +16,7 @@ mobile, clients only fetch the tiles for the area and zoom they look at:
 | `nordic-baltic.pmtiles` | OpenStreetMap (Geofabrik) via Planetiler, OpenMapTiles schema | Norway, Sweden, Denmark, Finland, Estonia, Latvia, Lithuania | z0–11 |
 | `finland.pmtiles` | MML Maastokartta 1:250k (kapsi.fi mirror) | Finland | z6–11 |
 | `finland-hd.pmtiles` | OpenStreetMap (Geofabrik) via Planetiler, OpenMapTiles schema | Finland (buildings, detailed roads, names) | z12–13 |
-| `neighbours.pmtiles` | OpenStreetMap (Geofabrik) via Planetiler, OpenMapTiles schema | Benelux, Germany, Poland (water + major roads only) | z0–11 |
+| `neighbours.pmtiles` | OpenStreetMap (Geofabrik) via Planetiler, OpenMapTiles schema | Benelux, Germany, Poland (water, roads to secondary + route numbers, rail) | z0–11 |
 
 Alongside them the site serves `stations.geojson` (~500 KB): railway
 stations and halts for the whole region, including metro and light rail.

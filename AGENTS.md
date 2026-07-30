@@ -24,8 +24,11 @@ scripts/generate-world.sh          Natural Earth 50m → dist/world.pmtiles (z0�
 scripts/generate-finland.sh        MML 1:250k shapefiles → dist/finland.pmtiles (z6–11)
 scripts/generate-finland-hd.sh     Geofabrik Finland OSM + Planetiler → dist/finland-hd.pmtiles (z12–13)
 scripts/generate-nordic-baltic.sh  Geofabrik OSM + osmium + Planetiler → dist/nordic-baltic.pmtiles (z0–11)
-                                   and dist/stations.geojson (railway stations, all zooms)
-scripts/generate-neighbours.sh     Geofabrik OSM, water + major roads only → dist/neighbours.pmtiles (z0–11)
+                                   and dist/stations-nordic-baltic.geojson
+scripts/generate-neighbours.sh     Geofabrik OSM, water + roads + rail → dist/neighbours.pmtiles (z0–11)
+                                   and dist/stations-neighbours.geojson
+scripts/extract-stations.sh        OSM extract → dist/stations-<region>.geojson (shared)
+scripts/merge-stations.sh          dist/stations-*.geojson → dist/stations.geojson
 scripts/generate-style.sh          style.template.json → dist/style.json + dist/index.html
 scripts/fetch-fonts.sh             openmaptiles/fonts glyph PBFs → dist/fonts/
 scripts/style.template.json        MapLibre style; __BASE_URL__ substituted at build time
@@ -88,6 +91,13 @@ Verify outputs with `pmtiles show dist/<file>.pmtiles` and
   `finland-hd`, `stations`) and attribution strings stable. The contract with
   downstream is the `style.json` URL — `service-map` loads only that and never
   names a source — but keep them stable for other consumers.
+- **Symbol layers are placed in REVERSE style order.** MapLibre's
+  `Placement.continuePlacement` walks the layer order from the end backwards, so
+  the symbol layer listed *last* is placed *first* and wins collisions. The
+  place labels therefore sit at the end of the style, after the `finland-hd`
+  road/water/place labels — otherwise a city name is silently collided away the
+  moment those z12/z13 layers switch on, which looks like the label vanishing as
+  soon as a fly-to settles. Keep `place-city` last.
 - **Layer order encodes the data split.** `hallinto` is an opaque fill
   covering all of Finland and sits above every `nordic` layer, which is why
   the OSM `transportation-*`/`rail-nordic*` layers show outside Finland
@@ -96,9 +106,13 @@ Verify outputs with `pmtiles show dist/<file>.pmtiles` and
   roads, as on GT Tiekartta.
 - Train stations cannot come from the tiles: OpenMapTiles keeps them in its
   `poi` layer, which Planetiler pins to minzoom 14 — above the z13 built
-  here. `generate-nordic-baltic.sh` extracts them from the merged OSM
-  extract with `osmium tags-filter` (~30 s) into `dist/stations.geojson`
-  (~500 KB, ~67 KB gzipped), used as a plain `geojson` style source.
+  here. `scripts/extract-stations.sh` pulls them out of an OSM extract with
+  `osmium tags-filter` (~30 s); `generate-nordic-baltic.sh` and
+  `generate-neighbours.sh` each call it for their own region, writing
+  `dist/stations-<region>.geojson`, and `scripts/merge-stations.sh` combines
+  those into the single `dist/stations.geojson` the style declares. The merge
+  tolerates a region being absent so one failed build degrades to a map missing
+  that region's stations rather than a broken `stations` source.
 - **Licenses/attribution are load-bearing.** Keep the source `attribution`
   fields, the vendored `licenses/` texts, `NOTICE.md`, and the served
   `dist/fonts/OFL.txt` (written by `fetch-fonts.sh`) and `dist/NOTICE.md`

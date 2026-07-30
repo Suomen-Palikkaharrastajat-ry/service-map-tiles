@@ -7,9 +7,11 @@
 # Those tiles currently carry `place` labels and nothing else — measured, a z8
 # tile over Berlin is 9 KB of labels against 178 KB for Stockholm — so the
 # neighbours render as bare background with city names floating on it. This
-# archive fills in the water and the major road network, which is most of the
-# visual difference per byte. Landcover/landuse are deliberately excluded: they
-# were 115 KB of that 178 KB Stockholm tile, and the Pages budget is finite.
+# archive fills in the water, the road network down to secondary with its route
+# numbers, and the railways, which is most of the visual difference per byte. Landcover/landuse are deliberately
+# excluded: they were 115 KB of that 178 KB Stockholm tile, and the Pages budget
+# is finite. Rail by contrast is cheap — measured against nordic-baltic it is
+# 10.6% of the transportation layer, a couple of MB at this scale.
 #
 # `place` stays out of here too: nordic-baltic.pmtiles already labels these
 # countries, and tiling them twice would double-draw every city name.
@@ -37,19 +39,26 @@ if [ ! -f "$CACHE/neighbours.osm.pbf" ]; then
         # Random jitter (0-15s) to avoid hammering Geofabrik when
         # multiple CI jobs start simultaneously.
         sleep $((RANDOM % 16))
+        # Download to a temp name and move it into place: an interrupted
+        # transfer must not leave a truncated file that the guard above would
+        # accept on the next run, which surfaces much later as
+        # "PBF error: unexpected EOF" out of osmium.
         curl -sfL --retry 5 --retry-delay 15 --retry-all-errors \
           -A "service-map-tiles (github.com/Suomen-Palikkaharrastajat-ry)" \
-          -o "$pbf" "https://download.geofabrik.de/europe/${country}-latest.osm.pbf"
+          -o "$pbf.part" "https://download.geofabrik.de/europe/${country}-latest.osm.pbf"
+        mv "$pbf.part" "$pbf"
       fi
       # No -R here: way and relation geometry needs its referenced members,
       # which is exactly what the place-only filter in generate-nordic-baltic.sh
       # does not need.
-      echo "Filtering water and major roads from $country..."
+      echo "Filtering water, roads and railways from $country..."
       osmium tags-filter "$pbf" \
         w/natural=water r/natural=water \
         w/landuse=reservoir,basin r/landuse=reservoir,basin \
         w/waterway=river,canal,riverbank r/waterway=riverbank \
-        w/highway=motorway,trunk,primary,motorway_link,trunk_link \
+        w/highway=motorway,trunk,primary,secondary,motorway_link,trunk_link,primary_link,secondary_link \
+        w/railway=rail,light_rail,narrow_gauge \
+        n/railway=station,halt \
         -o "$filtered" --overwrite
       # Free disk immediately: the German extract alone is several GB.
       rm -f "$pbf"
@@ -70,6 +79,12 @@ else
   echo "Merged extract $CACHE/neighbours.osm.pbf already exists, skipping download."
 fi
 
+# Station nodes ride along in the filtered extract, so the lines drawn here get
+# the same markers the Nordic ones have.
+echo "Extracting railway stations..."
+bash scripts/extract-stations.sh \
+  "$CACHE/neighbours.osm.pbf" "$CACHE" dist/stations-neighbours.geojson
+
 echo "Installing Planetiler ${PLANETILER_VERSION}..."
 if [ ! -f "$CACHE/planetiler.jar" ] || \
    ! echo "${PLANETILER_SHA256}  $CACHE/planetiler.jar" | sha256sum -c - > /dev/null 2>&1; then
@@ -78,7 +93,7 @@ if [ ! -f "$CACHE/planetiler.jar" ] || \
   echo "${PLANETILER_SHA256}  $CACHE/planetiler.jar" | sha256sum -c -
 fi
 
-echo "Running Planetiler (OpenMapTiles profile, water + major roads)..."
+echo "Running Planetiler (OpenMapTiles profile, water + roads + rail)..."
 REPO_ROOT=$PWD
 # Run from inside the cache so Planetiler's default data/sources/ download
 # location (water polygons, Natural Earth, lake centerlines) stays cacheable.
@@ -89,7 +104,7 @@ REPO_ROOT=$PWD
     --download \
     --minzoom=0 --maxzoom=11 \
     --polygon="$REPO_ROOT/scripts/nordic-baltic.poly" \
-    --only-layers=water,waterway,transportation \
+    --only-layers=water,waterway,transportation,transportation_name \
     --storage=mmap --nodemap-type=sortedtable \
     --languages=fi,sv,en,de,nl,fr,pl \
     --fetch-wikidata=false --use-wikidata=false \

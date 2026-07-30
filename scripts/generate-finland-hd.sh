@@ -17,9 +17,12 @@ if [ ! -f "$PBF" ]; then
   # Random jitter (0-15s) to avoid hammering Geofabrik when
   # multiple CI jobs start simultaneously.
   sleep $((RANDOM % 16))
+  # .part then move: an interrupted transfer must not leave a truncated extract
+  # that the guard above accepts on the next run.
   curl -sfL --retry 5 --retry-delay 15 --retry-all-errors \
     -A "service-map-tiles (github.com/Suomen-Palikkaharrastajat-ry)" \
-    -o "$PBF" "https://download.geofabrik.de/europe/finland-latest.osm.pbf"
+    -o "$PBF.part" "https://download.geofabrik.de/europe/finland-latest.osm.pbf"
+  mv "$PBF.part" "$PBF"
 fi
 
 echo "Installing Planetiler ${PLANETILER_VERSION}..."

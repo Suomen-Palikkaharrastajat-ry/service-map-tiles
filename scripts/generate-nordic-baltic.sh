@@ -25,11 +25,14 @@ if [ ! -f "$CACHE/nordic-baltic.osm.pbf" ]; then
     if [ ! -f "$pbf" ]; then
       echo "Downloading $country..."
       # Random jitter (0-15s) to avoid hammering Geofabrik when
-      # multiple CI jobs start simultaneously.
+      # multiple CI jobs start simultaneously. Downloads land on a .part name
+      # and are moved into place, so an interrupted transfer cannot leave a
+      # truncated extract for the guard above to accept on the next run.
       sleep $((RANDOM % 16))
       curl -sfL --retry 5 --retry-delay 15 --retry-all-errors \
         -A "service-map-tiles (github.com/Suomen-Palikkaharrastajat-ry)" \
-        -o "$pbf" "https://download.geofabrik.de/europe/${country}-latest.osm.pbf"
+        -o "$pbf.part" "https://download.geofabrik.de/europe/${country}-latest.osm.pbf"
+      mv "$pbf.part" "$pbf"
     fi
   done
 
@@ -43,7 +46,8 @@ if [ ! -f "$CACHE/nordic-baltic.osm.pbf" ]; then
         sleep $((RANDOM % 16))
         curl -sfL --retry 5 --retry-delay 15 --retry-all-errors \
           -A "service-map-tiles (github.com/Suomen-Palikkaharrastajat-ry)" \
-          -o "$pbf" "https://download.geofabrik.de/europe/${country}-latest.osm.pbf"
+          -o "$pbf.part" "https://download.geofabrik.de/europe/${country}-latest.osm.pbf"
+        mv "$pbf.part" "$pbf"
       fi
       echo "Extracting places from $country..."
       osmium tags-filter -R "$pbf" n/place=city,town -o "$filtered" --overwrite
@@ -73,55 +77,12 @@ else
   echo "Merged extract $CACHE/nordic-baltic.osm.pbf already exists, skipping download."
 fi
 
-# Train stations. OpenMapTiles keeps these in its `poi` layer, which Planetiler
-# hard-codes to minzoom 14 — above the z11/z13 this project builds — so extract
-# them straight from the merged OSM extract instead and publish them as a small
-# GeoJSON source. `railway=station` also covers metro (station=subway); trams
-# (railway=tram_stop) are deliberately left out.
+# Stations go into a per-region file; scripts/merge-stations.sh combines them
+# into the single dist/stations.geojson the style declares. Keeping them
+# separate lets the two regional builds run as independent CI jobs.
 echo "Extracting railway stations..."
-osmium tags-filter -R "$CACHE/nordic-baltic.osm.pbf" n/railway=station,halt \
-  -o "$CACHE/stations.osm.pbf" --overwrite
-osmium export "$CACHE/stations.osm.pbf" -f geojson \
-  -o "$CACHE/stations-raw.geojson" --overwrite
-
-# Raw station nodes carry 15-20 tags each; keep only what the style renders.
-CACHE="$CACHE" python3 -c "
-import json, os
-
-cache = os.environ['CACHE']
-names = ('name', 'name:fi', 'name:sv', 'name:en')
-# A handful of nodes tag tram/monorail/funicular/model-railway stops as
-# railway=station; those are not part of the network this map shows.
-skip = {'tram', 'monorail', 'funicular', 'miniature'}
-urban = {'subway', 'light_rail'}
-
-with open(f'{cache}/stations-raw.geojson') as f:
-    data = json.load(f)
-
-features = []
-for feat in data['features']:
-    tags = feat['properties']
-    station = tags.get('station')
-    if station in skip:
-        continue
-    if not any(tags.get(n) for n in names):
-        continue
-    props = {n: tags[n] for n in names if tags.get(n)}
-    props['railway'] = tags.get('railway')
-    if station:
-        props['station'] = station
-    # Drives both the per-zoom style layers and label collision priority:
-    # 0 mainline station, 1 mainline halt, 2 metro / light rail.
-    if station in urban:
-        props['rank'] = 2
-    else:
-        props['rank'] = 0 if tags.get('railway') == 'station' else 1
-    features.append({'type': 'Feature', 'geometry': feat['geometry'], 'properties': props})
-
-with open('dist/stations.geojson', 'w') as f:
-    json.dump({'type': 'FeatureCollection', 'features': features}, f, ensure_ascii=False)
-print(f'Wrote {len(features)} stations to dist/stations.geojson')
-"
+bash scripts/extract-stations.sh \
+  "$CACHE/nordic-baltic.osm.pbf" "$CACHE" dist/stations-nordic-baltic.geojson
 
 echo "Installing Planetiler ${PLANETILER_VERSION}..."
 if [ ! -f "$CACHE/planetiler.jar" ] || \
