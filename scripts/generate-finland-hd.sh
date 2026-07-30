@@ -25,13 +25,33 @@ if [ ! -f "$CACHE/planetiler.jar" ] || \
   echo "${PLANETILER_SHA256}  $CACHE/planetiler.jar" | sha256sum -c -
 fi
 
+echo "Creating dummy shapefile to skip unused global downloads..."
+python3 -c "
+import zipfile
+with zipfile.ZipFile('$CACHE/dummy.zip', 'w') as zf:
+    header = bytearray(100)
+    header[0:4] = (9994).to_bytes(4, 'big')
+    header[24:28] = (50).to_bytes(4, 'big')
+    header[28:32] = (1000).to_bytes(4, 'little')
+    header[32:36] = (5).to_bytes(4, 'little')
+    zf.writestr('dummy.shp', header)
+    zf.writestr('dummy.shx', header)
+    dbf = bytearray(32)
+    dbf[0] = 0x03
+    dbf[8:10] = (32).to_bytes(2, 'little')
+    dbf[10:12] = (1).to_bytes(2, 'little')
+    zf.writestr('dummy.dbf', dbf)
+"
+
 echo "Running Planetiler (OpenMapTiles profile, z12-13)..."
 REPO_ROOT=$PWD
 (
   cd "$CACHE"
   java -Xmx4g -jar planetiler.jar \
     --osm-path=finland-latest.osm.pbf \
-    --download \
+    --water-polygons-path=dummy.zip \
+    --natural-earth-path=dummy.zip \
+    --lake-centerlines-path=dummy.zip \
     --minzoom=12 --maxzoom=13 \
     --only-layers=building,transportation,transportation_name,water,waterway,water_name,place,landcover,landuse,boundary \
     --storage=mmap --nodemap-type=sortedtable \
