@@ -30,6 +30,13 @@ if [ ! -f "$CACHE/planetiler.jar" ] || \
   echo "${PLANETILER_SHA256}  $CACHE/planetiler.jar" | sha256sum -c -
 fi
 
+# Only the two shapefile sources can be stubbed out this way. Natural Earth is
+# a sqlite db and Planetiler validates it on open ("No .sqlite file found inside
+# dummy.zip"), so --natural-earth-path=dummy.zip fails fast — tested, do not
+# retry. Its 415 MB download stays in .cache/finland-hd/data/sources/ even
+# though a z12-13 build never uses low-zoom NE data. If the Actions cache limit
+# ever becomes binding, --free-natural-earth-after-read=true trades that 415 MB
+# of cache for a 415 MB re-download on every run.
 echo "Creating dummy shapefile to skip unused global downloads..."
 echo "id,WKT" > "$CACHE/dummy.csv"
 echo "1,POLYGON EMPTY" >> "$CACHE/dummy.csv"
@@ -52,5 +59,25 @@ REPO_ROOT=$PWD
     --fetch-wikidata=false --use-wikidata=false \
     --output="$REPO_ROOT/dist/finland-hd.pmtiles" --force
 )
+
+# Planetiler derives the PMTiles header center zoom from the tileset bounds and
+# ignores --minzoom/--maxzoom, so this z12-13 archive comes out with
+# CenterZoom=4 and `pmtiles verify` rejects the header as invalid. MapLibre
+# ignores the field (the style drives zoom), but keep the archive spec-valid.
+# `pmtiles edit` rewrites only the header, not the tile data.
+echo "Correcting PMTiles header center zoom..."
+pmtiles show --header-json dist/finland-hd.pmtiles > "$CACHE/header.json"
+HEADER="$CACHE/header.json" python3 -c "
+import json, os
+
+path = os.environ['HEADER']
+with open(path) as f:
+    header = json.load(f)
+header['center'][2] = header['minzoom']
+with open(path, 'w') as f:
+    json.dump(header, f)
+print(f\"center zoom set to {header['minzoom']}\")
+"
+pmtiles edit --header-json="$CACHE/header.json" dist/finland-hd.pmtiles
 
 echo "Finland high-zoom tiles generated: dist/finland-hd.pmtiles"
