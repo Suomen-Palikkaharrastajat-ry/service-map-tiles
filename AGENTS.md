@@ -6,7 +6,7 @@ project.
 ## Project Overview
 
 This repository generates a self-hosted vector basemap as three regional
-PMTiles archives (world / Nordic+Baltic / Finland) plus a MapLibre
+PMTiles archives (world / regional / Finland / Finland-HD) plus a MapLibre
 `style.json` and glyph fonts, deployed to GitHub Pages for use by
 [Palikkakartta (service-map)](https://github.com/Suomen-Palikkaharrastajat-ry/service-map)
 and any other project that wants a self-hosted basemap instead of an
@@ -21,7 +21,8 @@ deploys the output.
 ```
 scripts/generate-world.sh          Natural Earth 50m → dist/world.pmtiles (z0–6)
 scripts/generate-finland.sh        MML 1:250k shapefiles → dist/finland.pmtiles (z0–11)
-scripts/generate-nordic-baltic.sh  Geofabrik OSM + osmium + Planetiler → dist/nordic-baltic.pmtiles (z0–11)
+scripts/generate-finland-hd.sh     Geofabrik Finland OSM + Planetiler → dist/finland-hd.pmtiles (z12–13)
+scripts/generate-nordic-baltic.sh  Geofabrik OSM + osmium + Planetiler → dist/nordic-baltic.pmtiles (z0–11) (Nordic, Baltic, DE, Benelux, PL)
 scripts/generate-style.sh          style.template.json → dist/style.json + dist/index.html
 scripts/fetch-fonts.sh             openmaptiles/fonts glyph PBFs → dist/fonts/
 scripts/style.template.json        MapLibre style; __BASE_URL__ substituted at build time
@@ -87,9 +88,10 @@ Verify outputs with `pmtiles show dist/<file>.pmtiles` and
   `*-latest.osm.pbf`; wipe them all (`make clean-cache`) so they
   re-download together. The CI cache keeps them consistent between runs.
 - **GitHub Pages size budget**: the whole `dist/` site must stay under
-  ~1 GB; the assemble job fails above ~950 MB. If `nordic-baltic.pmtiles`
-  grows too large, first drop `--maxzoom` to 10, then exclude OpenMapTiles
-  layers (`--exclude-layers=building,housenumber,poi`).
+  ~1 GB; the assemble job fails above ~950 MB. The regional build uses
+  `--only-layers` to include only the 7 styled layers; if archives
+  grow too large, drop `--maxzoom` on `nordic-baltic` to 10, or on
+  `finland-hd` to 13, or remove countries from the list.
 - **PMTiles needs HTTP range requests** — plain `python3 -m http.server`
   will not work for local testing; use `make serve` (Caddy).
 - MML's `kartat.kapsi.fi` mirror, Natural Earth's CDN, and Geofabrik are

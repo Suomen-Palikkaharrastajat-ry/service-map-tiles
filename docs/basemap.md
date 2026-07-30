@@ -23,10 +23,14 @@ land-fill fallback outside the Nordic region at higher zooms.
 ### `nordic-baltic.pmtiles` — OSM detail for the region (z0–11)
 
 Built by `scripts/generate-nordic-baltic.sh`: Geofabrik extracts for
-Norway, Sweden, Denmark, Finland, Estonia, Latvia and Lithuania are merged
-with `osmium merge` and rendered by [Planetiler](https://github.com/onthegomap/planetiler)
-(pinned jar, checksum-verified) using its default **OpenMapTiles** profile.
-That schema's `place` layer (class `city`/`town`/`village` plus a
+Norway, Sweden, Denmark, Finland, Estonia, Latvia, Lithuania, Germany,
+the Netherlands, Belgium, Luxembourg and Poland are merged with
+`osmium merge` and rendered by [Planetiler](https://github.com/onthegomap/planetiler)
+(pinned jar, checksum-verified) using the **OpenMapTiles** profile with
+`--only-layers=landcover,landuse,water,waterway,boundary,transportation,place`
+(only the layers the style references — building, housenumber, poi and
+other unstyled layers are excluded to save space). That schema's `place`
+layer (class `city`/`town`/`village` plus a
 per-feature `rank`) provides OSM-standard label prioritization per zoom
 level, including `name:fi` translations — this is what drives which labels
 appear at which zoom across the whole region, Finland included.
@@ -42,6 +46,16 @@ with GDAL. Source layers: `hallinto`, `vesi`, `tie`, `taajama`, `raja`,
 `nimisto`. The `nimisto` place names (with `scalerelev`-derived minzooms)
 are still in the archive for data consumers, but the shipped style labels
 Finland from the OpenMapTiles `place` layer instead.
+
+### `finland-hd.pmtiles` — Finland OSM high-zoom detail (z12–13)
+
+Built by `scripts/generate-finland-hd.sh` from the Finland Geofabrik
+extract, rendered by Planetiler (same pinned jar) at z12–13 only. This
+archive includes building footprints, detailed road/water networks, and
+`transportation_name` / `water_name` label layers — the detail that makes
+close zoom useful. The style adds layers referencing this source at z12+
+(buildings from z13, road/water names from z12–13). Outside Finland these
+zoom levels overzoom the regional archive's z11 tiles transparently.
 
 ## Style and fonts
 
@@ -91,7 +105,7 @@ maplibregl.addProtocol('pmtiles', new Protocol().tile);
 new maplibregl.Map({
   container: 'map',
   style: 'https://tiles.palikkaharrastajat.fi/style.json',
-  maxZoom: 11,
+  maxZoom: 13,
 });
 ```
 
@@ -109,7 +123,8 @@ new maplibregl.Map({
   cover the whole region); the layer data remains in `finland.pmtiles`.
 - Output is published via GitHub Pages only; the rolling `latest` GitHub
   release is discontinued.
-- Client `maxZoom` should remain 11.
+- Client `maxZoom` should be 13 to see Finland high-zoom detail.
+  Outside Finland, z12–13 overzooms the regional archive's z11 tiles.
 
 ## Licenses and attribution
 

@@ -31,9 +31,15 @@ jobs:
     needs: shellcheck
     strategy:
       matrix:
-        target: [world, finland, nordic-baltic]
+        target: [world, finland, finland-hd, nordic-baltic]
     steps:
       - uses: actions/checkout@v4
+
+      - name: Free disk space
+        if: matrix.target == 'nordic-baltic'
+        run: |
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc
+          df -h /
 
       - uses: cachix/install-nix-action@v31
         with:

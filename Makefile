@@ -7,7 +7,7 @@ shell: ## Enter devenv shell
 	devenv shell
 
 .PHONY: tiles
-tiles: world finland nordic-baltic style fonts ## Build all PMTiles, style and fonts into dist/
+tiles: world finland finland-hd nordic-baltic style fonts ## Build all PMTiles, style and fonts into dist/
 
 .PHONY: world
 world: dist/world.pmtiles ## Generate world country borders and labels (Natural Earth, z0-6)
@@ -20,6 +20,12 @@ finland: dist/finland.pmtiles ## Generate the Finland basemap from MML open data
 
 dist/finland.pmtiles: scripts/generate-finland.sh
 	bash scripts/generate-finland.sh
+
+.PHONY: finland-hd
+finland-hd: dist/finland-hd.pmtiles ## Generate Finland high-zoom OSM detail (z12-13)
+
+dist/finland-hd.pmtiles: scripts/generate-finland-hd.sh
+	bash scripts/generate-finland-hd.sh
 
 .PHONY: nordic-baltic
 nordic-baltic: dist/nordic-baltic.pmtiles ## Generate Nordic + Baltic OSM tiles with Planetiler (z0-11)
@@ -38,6 +44,13 @@ fonts: ## Fetch glyph fonts into dist/fonts/
 .PHONY: serve
 serve: ## Serve dist/ locally with range-request + CORS support on :8080
 	caddy run --config Caddyfile
+
+.PHONY: watch
+watch: ## Watch style and html templates, rebuild on change, and serve locally
+	@echo "Starting local server on :8080 and watching for template changes..."
+	@bash -c 'caddy run --config Caddyfile & CADDY_PID=$$!; \
+		trap "kill $$CADDY_PID" EXIT; \
+		watchexec -w scripts/style.template.json -w scripts/index.template.html -r "make style BASE_URL=http://localhost:8080"'
 
 .PHONY: clean
 clean: ## Remove generated output

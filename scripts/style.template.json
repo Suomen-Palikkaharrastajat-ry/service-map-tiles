@@ -17,6 +17,11 @@
       "type": "vector",
       "url": "pmtiles://__BASE_URL__/finland.pmtiles",
       "attribution": "&copy; Maanmittauslaitos"
+    },
+    "finland-hd": {
+      "type": "vector",
+      "url": "pmtiles://__BASE_URL__/finland-hd.pmtiles",
+      "attribution": "&copy; OpenMapTiles &copy; OpenStreetMap contributors"
     }
   },
   "layers": [
@@ -112,27 +117,102 @@
       }
     },
     {
-      "id": "transportation-major",
+      "id": "transportation-motorway-casing",
       "type": "line",
       "source": "nordic",
       "source-layer": "transportation",
       "minzoom": 6,
-      "filter": ["in", ["get", "class"], ["literal", ["motorway", "trunk", "primary"]]],
+      "filter": ["in", ["get", "class"], ["literal", ["motorway", "trunk"]]],
       "paint": {
-        "line-color": "#ffffff",
+        "line-color": "#7dab56",
         "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
-          6, 1,
-          11, 3
+          6, 2,
+          11, 5
         ]
       }
     },
     {
-      "id": "transportation-minor",
+      "id": "transportation-primary-casing",
+      "type": "line",
+      "source": "nordic",
+      "source-layer": "transportation",
+      "minzoom": 6,
+      "filter": ["==", ["get", "class"], "primary"],
+      "paint": {
+        "line-color": "#c0735e",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          6, 1.8,
+          11, 4
+        ]
+      }
+    },
+    {
+      "id": "transportation-secondary-casing",
       "type": "line",
       "source": "nordic",
       "source-layer": "transportation",
       "minzoom": 9,
-      "filter": ["in", ["get", "class"], ["literal", ["secondary", "tertiary", "minor"]]],
+      "filter": ["==", ["get", "class"], "secondary"],
+      "paint": {
+        "line-color": "#c4b05a",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          9, 1.4,
+          11, 2.5
+        ]
+      }
+    },
+    {
+      "id": "transportation-motorway",
+      "type": "line",
+      "source": "nordic",
+      "source-layer": "transportation",
+      "minzoom": 6,
+      "filter": ["in", ["get", "class"], ["literal", ["motorway", "trunk"]]],
+      "paint": {
+        "line-color": "#b2d88e",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          6, 1,
+          11, 3.5
+        ]
+      }
+    },
+    {
+      "id": "transportation-primary",
+      "type": "line",
+      "source": "nordic",
+      "source-layer": "transportation",
+      "minzoom": 6,
+      "filter": ["==", ["get", "class"], "primary"],
+      "paint": {
+        "line-color": "#e8a48c",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          6, 1,
+          11, 2.5
+        ]
+      }
+    },
+    {
+      "id": "transportation-secondary",
+      "type": "line",
+      "source": "nordic",
+      "source-layer": "transportation",
+      "minzoom": 9,
+      "filter": ["==", ["get", "class"], "secondary"],
+      "paint": {
+        "line-color": "#f0d87a",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          9, 0.8,
+          11, 1.5
+        ]
+      }
+    },
+    {
+      "id": "transportation-tertiary",
+      "type": "line",
+      "source": "nordic",
+      "source-layer": "transportation",
+      "minzoom": 9,
+      "filter": ["in", ["get", "class"], ["literal", ["tertiary", "minor"]]],
       "paint": {
         "line-color": "#ffffff",
         "line-width": 1
@@ -181,14 +261,131 @@
       }
     },
     {
-      "id": "tie",
+      "id": "tie-motorway-casing",
       "type": "line",
       "source": "finland",
       "source-layer": "tie",
       "minzoom": 7,
+      "filter": ["in", ["get", "Kohdeluokk"], ["literal", [12111, 12112]]],
+      "paint": {
+        "line-color": "#7dab56",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          7, 2,
+          11, 5
+        ]
+      }
+    },
+    {
+      "id": "tie-primary-casing",
+      "type": "line",
+      "source": "finland",
+      "source-layer": "tie",
+      "minzoom": 7,
+      "filter": ["in", ["get", "Kohdeluokk"], ["literal", [12121]]],
+      "paint": {
+        "line-color": "#c0735e",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          7, 1.8,
+          11, 4
+        ]
+      }
+    },
+    {
+      "id": "tie-secondary-casing",
+      "type": "line",
+      "source": "finland",
+      "source-layer": "tie",
+      "minzoom": 9,
+      "filter": ["in", ["get", "Kohdeluokk"], ["literal", [12122]]],
+      "paint": {
+        "line-color": "#c4b05a",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          9, 1.4,
+          11, 2.5
+        ]
+      }
+    },
+    {
+      "id": "tie-motorway",
+      "type": "line",
+      "source": "finland",
+      "source-layer": "tie",
+      "minzoom": 7,
+      "filter": ["in", ["get", "Kohdeluokk"], ["literal", [12111, 12112]]],
+      "paint": {
+        "line-color": "#b2d88e",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          7, 1.2,
+          11, 3.5
+        ]
+      }
+    },
+    {
+      "id": "tie-primary",
+      "type": "line",
+      "source": "finland",
+      "source-layer": "tie",
+      "minzoom": 7,
+      "filter": ["in", ["get", "Kohdeluokk"], ["literal", [12121]]],
+      "paint": {
+        "line-color": "#e8a48c",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          7, 1,
+          11, 2.5
+        ]
+      }
+    },
+    {
+      "id": "tie-secondary",
+      "type": "line",
+      "source": "finland",
+      "source-layer": "tie",
+      "minzoom": 9,
+      "filter": ["in", ["get", "Kohdeluokk"], ["literal", [12122]]],
+      "paint": {
+        "line-color": "#f0d87a",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          9, 0.8,
+          11, 1.5
+        ]
+      }
+    },
+    {
+      "id": "tie-tertiary",
+      "type": "line",
+      "source": "finland",
+      "source-layer": "tie",
+      "minzoom": 9,
+      "filter": ["in", ["get", "Kohdeluokk"], ["literal", [12131, 12132]]],
       "paint": {
         "line-color": "#ffffff",
-        "line-width": 1.5
+        "line-width": 0.8
+      }
+    },
+    {
+      "id": "tie-track",
+      "type": "line",
+      "source": "finland",
+      "source-layer": "tie",
+      "minzoom": 10,
+      "filter": ["in", ["get", "Kohdeluokk"], ["literal", [12141]]],
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": 0.5,
+        "line-opacity": 0.7
+      }
+    },
+    {
+      "id": "tie-ferry",
+      "type": "line",
+      "source": "finland",
+      "source-layer": "tie",
+      "minzoom": 9,
+      "filter": ["in", ["get", "Kohdeluokk"], ["literal", [12151, 12152]]],
+      "paint": {
+        "line-color": "#8bb4d8",
+        "line-dasharray": [6, 3],
+        "line-width": 1
       }
     },
     {
@@ -288,6 +485,236 @@
         "text-size": ["interpolate", ["exponential", 1.2], ["zoom"],
           10, 10,
           11, 12
+        ],
+        "symbol-sort-key": ["coalesce", ["get", "rank"], 15]
+      },
+      "paint": {
+        "text-color": "#666666",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "finland-hd-landcover",
+      "type": "fill",
+      "source": "finland-hd",
+      "source-layer": "landcover",
+      "minzoom": 12,
+      "filter": ["in", ["get", "class"], ["literal", ["wood", "grass", "farmland"]]],
+      "paint": {
+        "fill-color": [
+          "match", ["get", "class"],
+          "wood", "#dce8d4",
+          "grass", "#e4ecd8",
+          "farmland", "#eeeadc",
+          "#e8e8e0"
+        ],
+        "fill-opacity": 0.6
+      }
+    },
+    {
+      "id": "finland-hd-water",
+      "type": "fill",
+      "source": "finland-hd",
+      "source-layer": "water",
+      "minzoom": 12,
+      "paint": {
+        "fill-color": "#a0c8f0"
+      }
+    },
+    {
+      "id": "finland-hd-waterway",
+      "type": "line",
+      "source": "finland-hd",
+      "source-layer": "waterway",
+      "minzoom": 12,
+      "paint": {
+        "line-color": "#a0c8f0",
+        "line-width": 1
+      }
+    },
+    {
+      "id": "finland-hd-boundary",
+      "type": "line",
+      "source": "finland-hd",
+      "source-layer": "boundary",
+      "minzoom": 12,
+      "filter": ["all",
+        ["<=", ["get", "admin_level"], 6],
+        ["!=", ["get", "maritime"], 1]
+      ],
+      "paint": {
+        "line-color": "#b0a8b0",
+        "line-dasharray": [4, 4],
+        "line-width": 1
+      }
+    },
+    {
+      "id": "finland-hd-road-motorway-casing",
+      "type": "line",
+      "source": "finland-hd",
+      "source-layer": "transportation",
+      "minzoom": 12,
+      "filter": ["in", ["get", "class"], ["literal", ["motorway", "trunk"]]],
+      "paint": {
+        "line-color": "#7dab56",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          12, 5,
+          13, 7
+        ]
+      }
+    },
+    {
+      "id": "finland-hd-road-primary-casing",
+      "type": "line",
+      "source": "finland-hd",
+      "source-layer": "transportation",
+      "minzoom": 12,
+      "filter": ["==", ["get", "class"], "primary"],
+      "paint": {
+        "line-color": "#c0735e",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          12, 4,
+          13, 5.5
+        ]
+      }
+    },
+    {
+      "id": "finland-hd-road-secondary-casing",
+      "type": "line",
+      "source": "finland-hd",
+      "source-layer": "transportation",
+      "minzoom": 12,
+      "filter": ["==", ["get", "class"], "secondary"],
+      "paint": {
+        "line-color": "#c4b05a",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          12, 2.5,
+          13, 3.5
+        ]
+      }
+    },
+    {
+      "id": "finland-hd-road-motorway",
+      "type": "line",
+      "source": "finland-hd",
+      "source-layer": "transportation",
+      "minzoom": 12,
+      "filter": ["in", ["get", "class"], ["literal", ["motorway", "trunk"]]],
+      "paint": {
+        "line-color": "#b2d88e",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          12, 3.5,
+          13, 5
+        ]
+      }
+    },
+    {
+      "id": "finland-hd-road-primary",
+      "type": "line",
+      "source": "finland-hd",
+      "source-layer": "transportation",
+      "minzoom": 12,
+      "filter": ["==", ["get", "class"], "primary"],
+      "paint": {
+        "line-color": "#e8a48c",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          12, 2.5,
+          13, 3.5
+        ]
+      }
+    },
+    {
+      "id": "finland-hd-road-secondary",
+      "type": "line",
+      "source": "finland-hd",
+      "source-layer": "transportation",
+      "minzoom": 12,
+      "filter": ["==", ["get", "class"], "secondary"],
+      "paint": {
+        "line-color": "#f0d87a",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          12, 1.5,
+          13, 2.5
+        ]
+      }
+    },
+    {
+      "id": "finland-hd-road-minor",
+      "type": "line",
+      "source": "finland-hd",
+      "source-layer": "transportation",
+      "minzoom": 12,
+      "filter": ["in", ["get", "class"], ["literal", ["tertiary", "minor", "service", "path"]]],
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": ["interpolate", ["exponential", 1.4], ["zoom"],
+          12, 1.5,
+          13, 2
+        ]
+      }
+    },
+    {
+      "id": "finland-hd-building",
+      "type": "fill",
+      "source": "finland-hd",
+      "source-layer": "building",
+      "minzoom": 13,
+      "paint": {
+        "fill-color": "#d9d0c9",
+        "fill-outline-color": "#c0b8b0"
+      }
+    },
+    {
+      "id": "finland-hd-road-label",
+      "type": "symbol",
+      "source": "finland-hd",
+      "source-layer": "transportation_name",
+      "minzoom": 13,
+      "layout": {
+        "text-field": ["coalesce", ["get", "name:fi"], ["get", "name"]],
+        "text-font": ["Open Sans Regular"],
+        "text-size": 10,
+        "symbol-placement": "line",
+        "text-max-angle": 30
+      },
+      "paint": {
+        "text-color": "#666666",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "finland-hd-water-label",
+      "type": "symbol",
+      "source": "finland-hd",
+      "source-layer": "water_name",
+      "minzoom": 12,
+      "layout": {
+        "text-field": ["coalesce", ["get", "name:fi"], ["get", "name"]],
+        "text-font": ["Open Sans Regular"],
+        "text-size": 11,
+        "symbol-placement": "point"
+      },
+      "paint": {
+        "text-color": "#6b8eb5",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "finland-hd-place",
+      "type": "symbol",
+      "source": "finland-hd",
+      "source-layer": "place",
+      "minzoom": 12,
+      "filter": ["in", ["get", "class"], ["literal", ["village", "hamlet", "neighbourhood", "isolated_dwelling"]]],
+      "layout": {
+        "text-field": ["coalesce", ["get", "name:fi"], ["get", "name"]],
+        "text-font": ["Open Sans Regular"],
+        "text-size": ["interpolate", ["exponential", 1.2], ["zoom"],
+          12, 10,
+          14, 13
         ],
         "symbol-sort-key": ["coalesce", ["get", "rank"], 15]
       },

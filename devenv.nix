@@ -11,6 +11,7 @@
     pmtiles
     jdk21_headless
     caddy
+    watchexec
   ];
 
   enterShell = ''
@@ -23,6 +24,7 @@
     echo ""
     echo "  make tiles  — build all PMTiles + style into dist/"
     echo "  make serve  — serve dist/ locally on :8080"
+    echo "  make watch  — watch templates, rebuild style on change, and serve"
     echo ""
   '';
 }
