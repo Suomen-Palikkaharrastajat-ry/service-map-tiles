@@ -28,7 +28,7 @@ fi
 echo "Creating dummy shapefile to skip unused global downloads..."
 echo "id,WKT" > "$CACHE/dummy.csv"
 echo "1,POLYGON EMPTY" >> "$CACHE/dummy.csv"
-ogr2ogr -f "ESRI Shapefile" "$CACHE/dummy.shp" "$CACHE/dummy.csv"
+ogr2ogr -f "ESRI Shapefile" -a_srs EPSG:3857 "$CACHE/dummy.shp" "$CACHE/dummy.csv"
 zip -j "$CACHE/dummy.zip" "$CACHE/dummy.shp" "$CACHE/dummy.shx" "$CACHE/dummy.dbf" "$CACHE/dummy.prj" 2>/dev/null || true
 
 echo "Running Planetiler (OpenMapTiles profile, z12-13)..."
@@ -37,8 +37,8 @@ REPO_ROOT=$PWD
   cd "$CACHE"
   java -Xmx4g -jar planetiler.jar \
     --osm-path=finland-latest.osm.pbf \
+    --download \
     --water-polygons-path=dummy.zip \
-    --natural-earth-path=dummy.zip \
     --lake-centerlines-path=dummy.zip \
     --minzoom=12 --maxzoom=13 \
     --only-layers=building,transportation,transportation_name,water,waterway,water_name,place,landcover,landuse,boundary \
