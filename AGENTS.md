@@ -91,6 +91,13 @@ Verify outputs with `pmtiles show dist/<file>.pmtiles` and
   `finland-hd`, `stations`) and attribution strings stable. The contract with
   downstream is the `style.json` URL — `service-map` loads only that and never
   names a source — but keep them stable for other consumers.
+- **Symbol layers are placed in REVERSE style order.** MapLibre's
+  `Placement.continuePlacement` walks the layer order from the end backwards, so
+  the symbol layer listed *last* is placed *first* and wins collisions. The
+  place labels therefore sit at the end of the style, after the `finland-hd`
+  road/water/place labels — otherwise a city name is silently collided away the
+  moment those z12/z13 layers switch on, which looks like the label vanishing as
+  soon as a fly-to settles. Keep `place-city` last.
 - **Layer order encodes the data split.** `hallinto` is an opaque fill
   covering all of Finland and sits above every `nordic` layer, which is why
   the OSM `transportation-*`/`rail-nordic*` layers show outside Finland

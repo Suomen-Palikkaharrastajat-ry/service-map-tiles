@@ -1860,231 +1860,6 @@
       }
     },
     {
-      "id": "place-country",
-      "type": "symbol",
-      "source": "nordic",
-      "source-layer": "place",
-      "minzoom": 6,
-      "filter": [
-        "==",
-        [
-          "get",
-          "class"
-        ],
-        "country"
-      ],
-      "layout": {
-        "text-field": [
-          "coalesce",
-          [
-            "get",
-            "name:fi"
-          ],
-          [
-            "get",
-            "name"
-          ]
-        ],
-        "text-font": [
-          "Open Sans Semibold"
-        ],
-        "text-size": 14,
-        "symbol-sort-key": [
-          "coalesce",
-          [
-            "get",
-            "rank"
-          ],
-          9
-        ]
-      },
-      "paint": {
-        "text-color": "#555555",
-        "text-halo-color": "#ffffff",
-        "text-halo-width": 1
-      }
-    },
-    {
-      "id": "place-city",
-      "type": "symbol",
-      "source": "nordic",
-      "source-layer": "place",
-      "minzoom": 5,
-      "filter": [
-        "==",
-        [
-          "get",
-          "class"
-        ],
-        "city"
-      ],
-      "layout": {
-        "text-field": [
-          "coalesce",
-          [
-            "get",
-            "name:fi"
-          ],
-          [
-            "get",
-            "name"
-          ]
-        ],
-        "text-font": [
-          "Open Sans Semibold"
-        ],
-        "text-size": [
-          "interpolate",
-          [
-            "exponential",
-            1.2
-          ],
-          [
-            "zoom"
-          ],
-          5,
-          11,
-          11,
-          18,
-          16,
-          26
-        ],
-        "symbol-sort-key": [
-          "coalesce",
-          [
-            "get",
-            "rank"
-          ],
-          15
-        ]
-      },
-      "paint": {
-        "text-color": "#333333",
-        "text-halo-color": "#ffffff",
-        "text-halo-width": 1
-      }
-    },
-    {
-      "id": "place-town",
-      "type": "symbol",
-      "source": "nordic",
-      "source-layer": "place",
-      "minzoom": 8,
-      "filter": [
-        "==",
-        [
-          "get",
-          "class"
-        ],
-        "town"
-      ],
-      "layout": {
-        "text-field": [
-          "coalesce",
-          [
-            "get",
-            "name:fi"
-          ],
-          [
-            "get",
-            "name"
-          ]
-        ],
-        "text-font": [
-          "Open Sans Regular"
-        ],
-        "text-size": [
-          "interpolate",
-          [
-            "exponential",
-            1.2
-          ],
-          [
-            "zoom"
-          ],
-          8,
-          10,
-          11,
-          14,
-          16,
-          20
-        ],
-        "symbol-sort-key": [
-          "coalesce",
-          [
-            "get",
-            "rank"
-          ],
-          15
-        ]
-      },
-      "paint": {
-        "text-color": "#333333",
-        "text-halo-color": "#ffffff",
-        "text-halo-width": 1
-      }
-    },
-    {
-      "id": "place-village",
-      "type": "symbol",
-      "source": "nordic",
-      "source-layer": "place",
-      "minzoom": 10,
-      "filter": [
-        "==",
-        [
-          "get",
-          "class"
-        ],
-        "village"
-      ],
-      "layout": {
-        "text-field": [
-          "coalesce",
-          [
-            "get",
-            "name:fi"
-          ],
-          [
-            "get",
-            "name"
-          ]
-        ],
-        "text-font": [
-          "Open Sans Regular"
-        ],
-        "text-size": [
-          "interpolate",
-          [
-            "exponential",
-            1.2
-          ],
-          [
-            "zoom"
-          ],
-          10,
-          10,
-          11,
-          12,
-          16,
-          17
-        ],
-        "symbol-sort-key": [
-          "coalesce",
-          [
-            "get",
-            "rank"
-          ],
-          15
-        ]
-      },
-      "paint": {
-        "text-color": "#666666",
-        "text-halo-color": "#ffffff",
-        "text-halo-width": 1
-      }
-    },
-    {
       "id": "finland-road-number",
       "type": "symbol",
       "source": "finland",
@@ -2540,6 +2315,223 @@
       }
     },
     {
+      "id": "place-village",
+      "type": "symbol",
+      "source": "nordic",
+      "source-layer": "place",
+      "minzoom": 10,
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "village"
+      ],
+      "layout": {
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:fi"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Open Sans Regular"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "exponential",
+            1.2
+          ],
+          [
+            "zoom"
+          ],
+          10,
+          10,
+          11,
+          12,
+          16,
+          17
+        ],
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          15
+        ]
+      },
+      "paint": {
+        "text-color": "#666666",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "station-label",
+      "type": "symbol",
+      "source": "stations",
+      "minzoom": 11,
+      "layout": {
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:fi"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Open Sans Regular"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "exponential",
+            1.2
+          ],
+          [
+            "zoom"
+          ],
+          11,
+          10,
+          13,
+          12,
+          16,
+          14
+        ],
+        "text-anchor": "left",
+        "text-offset": [
+          0.6,
+          0
+        ],
+        "symbol-sort-key": [
+          "get",
+          "rank"
+        ]
+      },
+      "paint": {
+        "text-color": "#333333",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.2
+      }
+    },
+    {
+      "id": "place-country",
+      "type": "symbol",
+      "source": "nordic",
+      "source-layer": "place",
+      "minzoom": 6,
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "country"
+      ],
+      "layout": {
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:fi"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Open Sans Semibold"
+        ],
+        "text-size": 14,
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          9
+        ]
+      },
+      "paint": {
+        "text-color": "#555555",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "place-town",
+      "type": "symbol",
+      "source": "nordic",
+      "source-layer": "place",
+      "minzoom": 8,
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "town"
+      ],
+      "layout": {
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:fi"
+          ],
+          [
+            "get",
+            "name"
+          ]
+        ],
+        "text-font": [
+          "Open Sans Regular"
+        ],
+        "text-size": [
+          "interpolate",
+          [
+            "exponential",
+            1.2
+          ],
+          [
+            "zoom"
+          ],
+          8,
+          10,
+          11,
+          14,
+          16,
+          20
+        ],
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          15
+        ]
+      },
+      "paint": {
+        "text-color": "#333333",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1
+      }
+    },
+    {
       "id": "station-circle",
       "type": "circle",
       "source": "stations",
@@ -2639,10 +2631,19 @@
       }
     },
     {
-      "id": "station-label",
+      "id": "place-city",
       "type": "symbol",
-      "source": "stations",
-      "minzoom": 11,
+      "source": "nordic",
+      "source-layer": "place",
+      "minzoom": 5,
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "city"
+      ],
       "layout": {
         "text-field": [
           "coalesce",
@@ -2656,7 +2657,7 @@
           ]
         ],
         "text-font": [
-          "Open Sans Regular"
+          "Open Sans Semibold"
         ],
         "text-size": [
           "interpolate",
@@ -2667,27 +2668,26 @@
           [
             "zoom"
           ],
+          5,
           11,
-          10,
-          13,
-          12,
+          11,
+          18,
           16,
-          14
-        ],
-        "text-anchor": "left",
-        "text-offset": [
-          0.6,
-          0
+          26
         ],
         "symbol-sort-key": [
-          "get",
-          "rank"
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          15
         ]
       },
       "paint": {
         "text-color": "#333333",
         "text-halo-color": "#ffffff",
-        "text-halo-width": 1.2
+        "text-halo-width": 1
       }
     }
   ]

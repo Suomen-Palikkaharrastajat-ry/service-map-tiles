@@ -134,6 +134,13 @@ bottom-to-top: world fill/borders (all zooms) → OpenMapTiles landcover,
 landuse, water, waterways, country boundaries, railways (z8+), roads (z5+)
 → MML Finland layers, railways then roads (z7+) → labels.
 
+The label block is ordered by **collision priority, not by drawing**. MapLibre
+places symbols in reverse style order, so the last symbol layer is placed first
+and wins. The order therefore runs least to most important: world country
+labels, road numbers, the `finland-hd` road/water/place labels, village,
+station labels, country, town, and `place-city` last. Get this wrong and city
+names vanish the moment the z12/z13 `finland-hd` labels switch on.
+
 That order is load-bearing. `hallinto` is an opaque fill covering all of
 Finland, so every `nordic` layer below it is masked inside Finland and shows
 only in the rest of the region — which is why Finland gets MML geometry and
