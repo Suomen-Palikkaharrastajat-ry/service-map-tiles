@@ -13,7 +13,13 @@ STACKS=("Open Sans Regular" "Open Sans Semibold" "Open Sans Bold")
 if [ ! -d "$CACHE/extracted" ]; then
   echo "Downloading glyph fonts..."
   curl -sL -o "$CACHE/fonts.zip" "$FONTS_URL"
-  unzip -o -q "$CACHE/fonts.zip" -d "$CACHE/extracted"
+  # Extract to a temp dir and move it into place, so an interrupted unzip does
+  # not leave a half-populated extracted/ that the guard above would accept.
+  rm -rf "$CACHE/extracted.tmp"
+  unzip -o -q "$CACHE/fonts.zip" -d "$CACHE/extracted.tmp"
+  mv "$CACHE/extracted.tmp" "$CACHE/extracted"
+  # extracted/ is the cached artefact; the 61 MB zip is dead weight after this.
+  rm -f "$CACHE/fonts.zip"
 fi
 
 for stack in "${STACKS[@]}"; do
